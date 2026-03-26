@@ -1,10 +1,19 @@
 export const about = {
   summary:
-    "I am a software engineer focused on building reliable web applications with clear UI structure, maintainable code, and practical product thinking. I enjoy turning ideas into useful tools and strengthening the systems behind them.",
+    "I am a software engineer and mathematics student at DePauw University building practical systems across web, AI, computer vision, and interactive software. My work focuses on shipping products that are technically solid, measurable in impact, and easy for real users to adopt.",
   highlights: [
-    "Full-stack web development",
-    "Object-oriented programming",
-    "Teaching and mentoring",
-    "Clean, maintainable interfaces",
+    "B.A. in Computer Science & Mathematics at DePauw University",
+    "Expected graduation: May 2027",
+    "GPA: 3.78",
+    "Interested in software engineering internships and product-focused engineering roles",
   ],
+  education: {
+    school: "DePauw University",
+    degree: "B.A. in Computer Science & Mathematics",
+    date: "May 2027",
+    details: [
+      "Coursework: Data Structures (C++), Linear Algebra, Software Design (OOP), AI, Programming Languages, Computer Security, Mobile Development, Computer Systems",
+      "Affiliations: CodeMely, Google Developer Student Clubs, Information Technology Associates Program",
+    ],
+  },
 };

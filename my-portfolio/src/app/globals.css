@@ -1,13 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0c0a09;
-  --foreground: #f5f5f4;
-  --muted: #d6d3d1;
-  --card: rgba(28, 25, 23, 0.72);
-  --border: rgba(255, 255, 255, 0.1);
-  --accent: #f97316;
-  --accent-strong: #ef4444;
+  --background: #030c16;
+  --foreground: #eef4ff;
+  --muted: #b8a79c;
+  --card: rgba(18, 24, 34, 0.82);
+  --border: rgba(190, 109, 71, 0.18);
+  --accent: #ff8a4c;
+  --accent-strong: #ff5a36;
+  --hero-bg: #090607;
+  --hero-surface: rgba(28, 17, 14, 0.72);
+  --hero-border: rgba(219, 109, 58, 0.16);
+  --hero-grid: rgba(244, 114, 36, 0.05);
+  --hero-glow: rgba(255, 106, 52, 0.12);
+  --hero-code: rgba(70, 32, 22, 0.18);
+  --hero-code-border: rgba(183, 90, 50, 0.16);
+  --hero-noise-opacity: 0.04;
+}
+
+[data-theme="light"] {
+  --background: #f4f5f7;
+  --foreground: #162033;
+  --muted: #5e6b82;
+  --card: rgba(255, 255, 255, 0.72);
+  --border: rgba(148, 163, 184, 0.24);
+  --accent: #4f8cff;
+  --accent-strong: #1a6cf6;
+  --hero-bg: #f4f5f7;
+  --hero-surface: rgba(255, 255, 255, 0.72);
+  --hero-border: rgba(148, 163, 184, 0.18);
+  --hero-grid: rgba(148, 163, 184, 0.05);
+  --hero-glow: rgba(26, 108, 246, 0.05);
+  --hero-code: rgba(84, 112, 168, 0.08);
+  --hero-code-border: rgba(148, 163, 184, 0.18);
+  --hero-noise-opacity: 0.03;
 }
 
 @theme inline {
@@ -27,17 +53,36 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(circle at top, rgba(249, 115, 22, 0.18), transparent 30%),
-    linear-gradient(180deg, #1c1917 0%, #0c0a09 40%, #0c0a09 100%);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
 }
 
 a {
-  transition: color 150ms ease, opacity 150ms ease;
+  transition: color 150ms ease, opacity 150ms ease, border-color 150ms ease,
+    background-color 150ms ease;
 }
 
 section {
   scroll-margin-top: 6rem;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #7b8798;
+}
+
+@keyframes code-drift {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-code-drift {
+  animation: code-drift 9s ease-in-out infinite alternate;
 }

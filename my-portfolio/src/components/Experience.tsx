@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SectionTitle from "./SectionTitle";
 import ScrollReveal from "./ScrollReveal";
 import Tag from "./Tag";
@@ -34,21 +35,38 @@ export default function Experience() {
       </div>
 
       <div className="relative mt-16">
-        <div className="absolute bottom-0 left-6 top-0 z-0 w-[2px] rounded-full bg-gradient-to-b from-orange-500/70 via-orange-500/20 to-transparent" />
+        <div className="absolute bottom-0 left-10 top-0 z-0 w-[2px] rounded-full bg-gradient-to-b from-orange-500/70 via-orange-500/20 to-transparent" />
 
         <div className="space-y-8">
           {experience.map((item, index) => (
             <ScrollReveal
               key={`${item.role}-${item.org}`}
               delayMs={index * 90}
-              className="relative pl-16"
+              className="relative pl-24"
             >
-              <div className="absolute left-0 top-8 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-orange-500/30 bg-slate-950 text-sm font-semibold tracking-[0.2em] text-orange-300 shadow-[0_14px_36px_rgba(249,115,22,0.22)]">
-                {String(index + 1).padStart(2, "0")}
+              <div className="absolute left-0 top-8 z-10 flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-orange-500/30 bg-slate-950 shadow-[0_22px_52px_rgba(249,115,22,0.24)]">
+                {item.logo ? (
+                  <Image
+                    src={item.logo}
+                    alt={`${item.org} logo`}
+                    width={200}
+                    height={200}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="text-sm font-semibold tracking-[0.12em] text-orange-300">
+                    {item.org
+                      .split(/[\s,&-]+/)
+                      .filter(Boolean)
+                      .slice(0, 2)
+                      .map((part) => part[0])
+                      .join("")}
+                  </span>
+                )}
               </div>
 
               <article className="rounded-[2rem] border border-slate-800/70 bg-slate-950/55 p-7 shadow-[0_24px_80px_rgba(2,6,23,0.35)] backdrop-blur-xl transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:shadow-[0_32px_100px_rgba(2,6,23,0.48)]">
-                <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                   <div className="max-w-3xl">
                     <div className="flex flex-wrap items-center gap-3">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-orange-400">
@@ -67,10 +85,44 @@ export default function Experience() {
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap gap-2 lg:max-w-[15rem] lg:justify-end">
-                    {item.tags.slice(0, 3).map((tag) => (
-                      <Tag key={`${item.role}-${tag}-summary`} text={tag} />
-                    ))}
+                  <div className="flex w-full flex-col gap-4 lg:max-w-[18rem] lg:items-end">
+                    {item.image ? (
+                      <a
+                        href={item.repoUrl !== "#" ? item.repoUrl : undefined}
+                        target={item.repoUrl !== "#" ? "_blank" : undefined}
+                        rel={item.repoUrl !== "#" ? "noreferrer" : undefined}
+                        aria-label={
+                          item.repoUrl !== "#"
+                            ? `Open the GitHub repository for ${item.role}`
+                            : `${item.role} preview image`
+                        }
+                        className={`group/image block overflow-hidden rounded-[1.5rem] border border-slate-800/80 bg-slate-900/80 ${
+                          item.repoUrl !== "#"
+                            ? "transition hover:border-orange-400/60"
+                            : "pointer-events-none"
+                        }`}
+                      >
+                        <Image
+                          src={item.image}
+                          alt={`${item.role} preview`}
+                          width={480}
+                          height={320}
+                          className="h-40 w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/image:scale-[1.03]"
+                        />
+                        {item.repoUrl !== "#" ? (
+                          <div className="flex items-center justify-between gap-3 border-t border-slate-800/80 px-4 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-orange-300">
+                            <span>Open Repo</span>
+                            <span>GitHub</span>
+                          </div>
+                        ) : null}
+                      </a>
+                    ) : null}
+
+                    <div className="flex flex-wrap gap-2 lg:justify-end">
+                      {item.tags.slice(0, 3).map((tag) => (
+                        <Tag key={`${item.role}-${tag}-summary`} text={tag} />
+                      ))}
+                    </div>
                   </div>
                 </div>
 

@@ -1,5 +1,47 @@
 export const projects = [
   {
+    title: "Tiger Time",
+    description:
+      "Hackathon productivity web app built around Pomodoro workflows, interactive utilities, and a high-energy alternate UI mode.",
+    fullDescription:
+      "A hackathon-built productivity application centered on Pomodoro study cycles, fast interaction loops, and a playful alternate experience designed to keep engagement high without sacrificing usability.",
+    details: [
+      "Built a Pomodoro-based productivity application with a modular timer system supporting study and break cycles with real-time UI updates.",
+      "Engineered interactive features including a to-do list, quote generator, and mini calendar using client-side state management.",
+      "Designed and implemented Brainrot Mode, a dynamic alternate UI with a video background and high-engagement interaction model.",
+    ],
+    features: [
+      "Responsive, component-driven interface with theme switching and smooth DOM updates",
+      "Modular timer workflow tailored for focused study and break sessions",
+      "End-to-end product delivery under hackathon constraints with rapid iteration",
+    ],
+    tags: ["JavaScript", "HTML", "CSS"],
+    image: "/images/thumbnails/TigerTimeThumbnail.png",
+    liveUrl: "#",
+    sourceUrl: "https://github.com/heyamktr",
+  },
+  {
+    title: "Pixel Knight",
+    description:
+      "2D platformer game featuring object-oriented game systems, enemy AI, collision handling, and responsive desktop gameplay.",
+    fullDescription:
+      "A desktop 2D platformer built in Java with an object-oriented architecture that organizes gameplay systems cleanly across rendering, control flow, enemy logic, and physics-driven interactions.",
+    details: [
+      "Developed a 2D platformer using object-oriented architecture, modeling player systems, enemy AI, and game physics.",
+      "Implemented a real-time game loop and state machine to manage scoring, difficulty scaling, and win/loss conditions.",
+      "Designed collision detection and enemy movement logic to ensure responsive and consistent gameplay interactions.",
+    ],
+    features: [
+      "Modular UI components including a control panel and avatar system for extensibility",
+      "Optimized rendering and event handling for smooth frame updates in a desktop GUI environment",
+      "Structured gameplay systems that support customization and future feature growth",
+    ],
+    tags: ["Java", "Swing", "OOP"],
+    image: "/images/thumbnails/pixelKnightThumbnail.png",
+    liveUrl: "#",
+    sourceUrl: "https://github.com/heyamktr",
+  },
+  {
     title: "Greencastle Discovery Platform",
     description:
       "Full-stack local discovery platform for events and businesses aggregated from external community sources.",
@@ -17,9 +59,9 @@ export const projects = [
       "Production-ready deployment setup with environment variables, API separation, and stable database connection handling",
     ],
     tags: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS", "REST APIs"],
-    image: null,
+    image: "/images/thumbnails/GoGreencastle.png",
     liveUrl: "#",
-    sourceUrl: "#",
+    sourceUrl: "https://github.com/heyamktr",
   },
   {
     title: "Agentic Shopping Assistant",
@@ -38,9 +80,9 @@ export const projects = [
       "Review aggregation pipeline combining multiple external signals",
     ],
     tags: ["Python", "Amazon Nova", "FastAPI", "React", "Playwright", "PostgreSQL"],
-    image: null,
+    image: "/images/thumbnails/AgenCart.png",
     liveUrl: "#",
-    sourceUrl: "#",
+    sourceUrl: "https://github.com/heyamktr",
   },
   {
     title: "POV-AI Landmark Discovery App",
@@ -59,9 +101,9 @@ export const projects = [
       "Mobile-first Flutter frontend with authenticated user sessions",
     ],
     tags: ["Flutter", "Dart", "Python", "Supabase", "Gemini API", "Google Maps API"],
-    image: null,
+    image: "/images/thumbnails/POV.png",
     liveUrl: "#",
-    sourceUrl: "#",
+    sourceUrl: "https://github.com/heyamktr",
   },
   {
     title: "AI Workflow Automation System",
@@ -80,8 +122,8 @@ export const projects = [
       "Operational automation focused on repetitive communication tasks",
     ],
     tags: ["Python", "Gemini API", "Gmail API", "Google Calendar API", "Google Drive API"],
-    image: null,
+    image: "/images/thumbnails/lecoautomation.png",
     liveUrl: "#",
-    sourceUrl: "#",
+    sourceUrl: "https://github.com/heyamktr",
   },
 ];

@@ -11,6 +11,9 @@ export const experience = [
       "Reduced marker detection latency by 35% to sub-100ms end-to-end and validated usability with a 40-participant study using the Wilcoxon rank-sum test.",
     ],
     tags: ["C++", "OpenCV", "Raylib", "FluidSynth", "Raspberry Pi"],
+    logo: "/images/logos/DPU.png",
+    image: null,
+    repoUrl: "#",
   },
   {
     role: "Software Engineering Intern",
@@ -24,6 +27,9 @@ export const experience = [
       "Delivered front-end features used by 14,000+ players, improving UI responsiveness and gameplay usability.",
     ],
     tags: ["Lua", "TypeScript", "Roblox Studio", "Game UI"],
+    logo: "/images/logos/lecoStudio.jpg",
+    image: null,
+    repoUrl: "#",
   },
   {
     role: "Technical Director",
@@ -37,6 +43,10 @@ export const experience = [
       "Drove 100% program-wide adoption within 6 weeks and reduced average scheduling time by 50%.",
     ],
     tags: ["React", "Node.js", "PostgreSQL", "AWS EC2"],
+    logo: "/images/logos/DPU.png",
+
+    image: null,
+    repoUrl: "#",
   },
   {
     role: "Teaching Assistant",
@@ -49,6 +59,10 @@ export const experience = [
       "Worked primarily in Java while helping students debug projects and strengthen object-oriented programming fundamentals.",
     ],
     tags: ["Java", "Teaching", "Mentoring", "OOP"],
+    logo: "/images/logos/DPU.png",
+
+    image: null,
+    repoUrl: "#",
   },
   {
     role: "President",
@@ -61,5 +75,8 @@ export const experience = [
       "Organize AI, cloud, and mobile development workshops reaching 300+ students.",
     ],
     tags: ["Leadership", "Community", "Workshops"],
+    logo: "/images/logos/GDG.jpg",
+    image: null,
+    repoUrl: "#",
   },
 ];

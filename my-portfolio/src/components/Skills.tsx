@@ -5,9 +5,11 @@ import { skills } from "@/data/skills";
 
 const groups = [
   { title: "Languages", items: skills.languages },
-  { title: "Frameworks & Libraries", items: skills.frameworks },
-  { title: "Databases & Cloud", items: skills.dataCloud },
-  { title: "Tools & Platforms", items: skills.tools },
+  { title: "Frontend", items: skills.frontend },
+  { title: "Backend", items: skills.backend },
+  { title: "Databases", items: skills.databases },
+  { title: "Tools & Technologies", items: skills.tools },
+  { title: "Concepts", items: skills.concepts },
 ];
 
 const floatingSkills = [
@@ -16,7 +18,7 @@ const floatingSkills = [
   { name: "Python", short: "Py", color: "from-amber-100 to-yellow-50" },
   { name: "C++", short: "C++", color: "from-stone-100 to-orange-50" },
   { name: "PostgreSQL", short: "DB", color: "from-orange-100 to-red-50" },
-  { name: "Docker", short: "DK", color: "from-amber-100 to-orange-50" },
+  { name: "AWS", short: "AWS", color: "from-amber-100 to-orange-50" },
 ];
 
 export default function Skills() {
@@ -65,7 +67,7 @@ export default function Skills() {
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {groups.map((group, index) => (
             <ScrollReveal key={group.title} delayMs={120 + index * 90}>
               <article

@@ -173,6 +173,9 @@ export default function Projects() {
                     {activeProject.sourceUrl !== "#" ? (
                       <a
                         href={activeProject.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`Open the GitHub repository for ${activeProject.title}`}
                         className="rounded-full bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-400"
                       >
                         GitHub
@@ -181,6 +184,9 @@ export default function Projects() {
                     {activeProject.liveUrl !== "#" ? (
                       <a
                         href={activeProject.liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`Open the live demo for ${activeProject.title}`}
                         className="rounded-full border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 hover:border-orange-400"
                       >
                         Live Demo

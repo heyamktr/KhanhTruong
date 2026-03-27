@@ -18,7 +18,7 @@ export const projects = [
     tags: ["JavaScript", "HTML", "CSS"],
     image: "/images/thumbnails/TigerTimeThumbnail.png",
     liveUrl: "#",
-    sourceUrl: "https://github.com/heyamktr",
+    sourceUrl: "https://github.com/heyamktr/TheTimeHackathon_NguyenTienKhanhTruong",
   },
   {
     title: "Pixel Knight",
@@ -39,7 +39,7 @@ export const projects = [
     tags: ["Java", "Swing", "OOP"],
     image: "/images/thumbnails/pixelKnightThumbnail.png",
     liveUrl: "#",
-    sourceUrl: "https://github.com/heyamktr",
+    sourceUrl: "https://github.com/heyamktr/Pixel-Knight",
   },
   {
     title: "Greencastle Discovery Platform",
@@ -61,7 +61,7 @@ export const projects = [
     tags: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS", "REST APIs"],
     image: "/images/thumbnails/GoGreencastle.png",
     liveUrl: "#",
-    sourceUrl: "https://github.com/heyamktr",
+    sourceUrl: "https://github.com/heyamktr/VKLTigerhack",
   },
   {
     title: "Agentic Shopping Assistant",
@@ -82,7 +82,7 @@ export const projects = [
     tags: ["Python", "Amazon Nova", "FastAPI", "React", "Playwright", "PostgreSQL"],
     image: "/images/thumbnails/AgenCart.png",
     liveUrl: "#",
-    sourceUrl: "https://github.com/heyamktr",
+    sourceUrl: "https://github.com/giabach1106/Agentic-Shopping-Assistant",
   },
   {
     title: "POV-AI Landmark Discovery App",
@@ -103,7 +103,7 @@ export const projects = [
     tags: ["Flutter", "Dart", "Python", "Supabase", "Gemini API", "Google Maps API"],
     image: "/images/thumbnails/POV.png",
     liveUrl: "#",
-    sourceUrl: "https://github.com/heyamktr",
+    sourceUrl: "https://github.com/phamthucquyen/POV",
   },
   {
     title: "AI Workflow Automation System",

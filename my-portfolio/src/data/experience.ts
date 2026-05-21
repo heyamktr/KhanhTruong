@@ -1,5 +1,21 @@
 export const experience = [
   {
+    role: "Software Engineer Intern",
+    org: "InstaLab, LLC",
+    date: "Jun 2026 - Aug 2026, Remote",
+    description:
+      "Building Java microservices, real-time analytics dashboards, and testing infrastructure for customer-facing full-stack features.",
+    bullets: [
+      "Designing and implementing a RESTful microservice in Java to replace a legacy monolithic data pipeline, reducing projected query latency by 40% across 3 internal PostgreSQL databases via optimized JDBC connection pooling and indexed schema restructuring.",
+      "Building a React dashboard for real-time product analytics, integrating 5+ backend API endpoints and collaborating with a 3-person cross-functional team to ship an MVP ahead of a Q3 2026 investor demo.",
+      "Owning end-to-end testing infrastructure for a full-stack customer-facing feature, writing unit, integration, and regression test suites that reduced bug escape rate by 30% in pre-release QA cycles.",
+    ],
+    tags: ["Java", "React", "PostgreSQL", "JDBC", "Testing"],
+    logo: null,
+    image: null,
+    repoUrl: "#",
+  },
+  {
     role: "Research Assistant",
     org: "Tangible Learning Platform, DePauw University",
     date: "Jan 2025 - Present",

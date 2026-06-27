@@ -1,95 +1,184 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef } from "react";
+
+const NAV_LINKS = [
+  { href: "#about", label: "About" },
+  { href: "#skills", label: "Skills" },
+  { href: "#projects", label: "Projects" },
+  { href: "#contact", label: "Contact" },
+];
+
+const navLinkStyle: React.CSSProperties = {
+  color: "#D7E2EA",
+  textDecoration: "none",
+  fontWeight: 500,
+  textTransform: "uppercase",
+  letterSpacing: "0.1em",
+  fontSize: "clamp(0.875rem, 1.4vw, 1.4rem)",
+  transition: "opacity 0.2s",
+  cursor: "pointer",
+};
 
 export default function Hero() {
-  return (
-    <section id="home" className="relative">
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-center gap-10 px-6 pb-16 pt-28 md:flex-row md:items-center md:gap-16">
-        <div className="flex-1">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-orange-300">
-            Full-Stack, AI, and Computer Vision Engineer
-          </p>
-          <h1 className="text-5xl font-bold leading-tight tracking-tight text-slate-50 md:text-7xl">
-            Khanh <span className="text-orange-400">Truong</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            I build production-minded software across React, Python, C++, and
-            TypeScript, with hands-on work in full-stack systems, AI workflows,
-            and computer vision products.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3 text-sm text-slate-300">
-            <span
-              className="rounded-full border px-4 py-2 backdrop-blur"
-              style={{
-                borderColor: "var(--hero-border)",
-                background: "var(--hero-surface)",
-              }}
-            >
-              Greencastle, Indiana
-            </span>
-            <span
-              className="rounded-full border px-4 py-2 backdrop-blur"
-              style={{
-                borderColor: "var(--hero-border)",
-                background: "var(--hero-surface)",
-              }}
-            >
-              GPA 3.78
-            </span>
-            <span
-              className="rounded-full border px-4 py-2 backdrop-blur"
-              style={{
-                borderColor: "var(--hero-border)",
-                background: "var(--hero-surface)",
-              }}
-            >
-              May 2027
-            </span>
-          </div>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a
-              href="#projects"
-              className="rounded-full bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-400"
-            >
-              View Projects
-            </a>
-            <a
-              href="https://github.com/heyamktr"
-              className="rounded-full border px-6 py-3 font-semibold text-slate-100 hover:border-slate-500"
-              style={{
-                borderColor: "var(--hero-border)",
-                background: "rgba(10, 14, 21, 0.42)",
-              }}
-            >
-              GitHub
-            </a>
-            <a
-              href="#contact"
-              className="rounded-full border px-6 py-3 font-semibold text-slate-100 hover:border-slate-500"
-              style={{
-                borderColor: "var(--hero-border)",
-                background: "rgba(10, 14, 21, 0.42)",
-              }}
-            >
-              Contact Me
-            </a>
-          </div>
-        </div>
+  const magnetRef = useRef<HTMLDivElement>(null);
 
-        <div className="flex justify-center md:flex-1">
-          <div
-            className="overflow-hidden rounded-[2.2rem] border p-3 shadow-[0_32px_120px_rgba(8,12,20,0.6)] backdrop-blur-xl"
-            style={{
-              borderColor: "var(--hero-border)",
-              background: "rgba(11, 16, 24, 0.72)",
-            }}
+  useEffect(() => {
+    const el = magnetRef.current;
+    if (!el) return;
+    const PAD = 150,
+      STR = 3;
+
+    const onMove = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const maxD = Math.max(r.width, r.height) / 2 + PAD;
+      if (Math.hypot(dx, dy) < maxD) {
+        el.style.transform = `translate3d(${dx / STR}px, ${dy / STR}px, 0)`;
+        el.style.transition = "transform 0.3s ease-out";
+      } else {
+        el.style.transform = "translate3d(0,0,0)";
+        el.style.transition = "transform 0.6s ease-in-out";
+      }
+    };
+
+    const onLeave = () => {
+      el.style.transform = "translate3d(0,0,0)";
+      el.style.transition = "transform 0.6s ease-in-out";
+    };
+
+    window.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseleave", onLeave);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  return (
+    <section
+      id="home"
+      style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        overflowX: "clip",
+        position: "relative",
+        background: "#0C0C0C",
+      }}
+    >
+      {/* Nav */}
+      <nav
+        className="anim-nav"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "clamp(1.5rem, 3vw, 2rem) clamp(1.5rem, 3vw, 2.5rem) 0",
+          position: "relative",
+          zIndex: 20,
+        }}
+      >
+        {NAV_LINKS.map((link) => (
+          <a
+            key={link.href}
+            href={link.href}
+            style={navLinkStyle}
+            onMouseEnter={(e) =>
+              ((e.target as HTMLElement).style.opacity = "0.7")
+            }
+            onMouseLeave={(e) =>
+              ((e.target as HTMLElement).style.opacity = "1")
+            }
           >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      {/* Big heading */}
+      <div
+        className="anim-heading"
+        style={{ overflow: "hidden", width: "100%", marginTop: "clamp(1rem, 2vw, -1.25rem)" }}
+      >
+        <h1
+          className="hero-heading"
+          style={{
+            fontWeight: 900,
+            textTransform: "uppercase",
+            letterSpacing: "-0.025em",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
+            width: "100%",
+            padding: "0 1.5rem",
+            fontSize: "clamp(11vw, 14vw, 17.5vw)",
+          }}
+        >
+          Hi, i&apos;m khanh
+        </h1>
+      </div>
+
+      {/* Bottom row: tagline + CTA */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "space-between",
+          padding: "0 clamp(1.5rem, 3vw, 2.5rem) clamp(1.75rem, 3vw, 2.5rem)",
+          position: "relative",
+          zIndex: 20,
+        }}
+      >
+        <p
+          className="anim-desc"
+          style={{
+            color: "#D7E2EA",
+            fontWeight: 300,
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+            lineHeight: 1.375,
+            fontSize: "clamp(0.75rem, 1.4vw, 1.5rem)",
+            maxWidth: "clamp(160px, 20vw, 260px)",
+          }}
+        >
+          a software engineer building systems across web, ai, and mobile
+        </p>
+
+        <a href="#contact" className="anim-btn">
+          <button className="btn-contact">Contact Me</button>
+        </a>
+      </div>
+
+      {/* Portrait — centered on mobile, bottom-centered on sm+ */}
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          bottom: 0,
+          zIndex: 10,
+          transform: "translateX(-50%)",
+        }}
+      >
+        <div className="anim-portrait">
+          <div ref={magnetRef} style={{ willChange: "transform" }}>
             <Image
               src="/images/avatar.png"
-              alt="Portrait of Khanh Truong"
-              width={420}
-              height={420}
-              className="h-[320px] w-[320px] rounded-[1.75rem] object-cover md:h-[420px] md:w-[420px]"
+              alt="Khanh Truong"
+              width={520}
+              height={520}
               priority
+              style={{
+                width: "clamp(260px, 38vw, 520px)",
+                height: "auto",
+                display: "block",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
             />
           </div>
         </div>

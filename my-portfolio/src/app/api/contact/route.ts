@@ -1,7 +1,6 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const recipientEmail = "truongnguyent.khanh@gmail.com";
 
 function escapeHtml(value: string) {
@@ -21,6 +20,7 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const { name, email, message } = await req.json();
     const trimmedName = typeof name === "string" ? name.trim() : "";

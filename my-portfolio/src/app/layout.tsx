@@ -1,21 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import BackgroundDecor from "@/components/BackgroundDecor";
+import { Kanit } from "next/font/google";
+import ChatMascot from "@/components/ChatMascot";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const kanit = Kanit({
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-kanit",
 });
 
 export const metadata: Metadata = {
-  title: "Khanh Truong | Portfolio",
-  description: "Portfolio site for Khanh Truong built with Next.js.",
+  title: "Khanh Truong | Software Engineer",
+  description:
+    "Portfolio of Khanh Truong — software engineer building systems across web, AI, and mobile.",
 };
 
 export default function RootLayout({
@@ -24,14 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      data-theme="dark"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="relative isolate flex min-h-full flex-col bg-background text-foreground">
-        <BackgroundDecor />
-        <div className="relative z-10 flex min-h-full flex-col">{children}</div>
+    <html lang="en" className={kanit.variable}>
+      <body>
+        {children}
+        <ChatMascot />
       </body>
     </html>
   );

@@ -1,8 +1,8 @@
 export const experience = [
   {
     role: "Software Engineer Intern",
-    org: "InstaLab, LLC",
-    date: "Jun 2026 - Aug 2026, Remote",
+    org: "IpserLab, LLC",
+    date: "May 2026 – Aug 2026, Remote",
     description:
       "Building Java microservices, real-time analytics dashboards, and testing infrastructure for customer-facing full-stack features.",
     bullets: [
@@ -77,21 +77,6 @@ export const experience = [
     tags: ["Java", "Teaching", "Mentoring", "OOP"],
     logo: "/images/logos/DPU.png",
 
-    image: null,
-    repoUrl: "#",
-  },
-  {
-    role: "President",
-    org: "Google Developer Groups on Campus, DePauw University",
-    date: "Aug 2025 - Present",
-    description:
-      "Leading the campus developer community through technical programming and student events.",
-    bullets: [
-      "Lead a 10-member executive team for the campus Google Developer Groups chapter.",
-      "Organize AI, cloud, and mobile development workshops reaching 300+ students.",
-    ],
-    tags: ["Leadership", "Community", "Workshops"],
-    logo: "/images/logos/GDG.jpg",
     image: null,
     repoUrl: "#",
   },

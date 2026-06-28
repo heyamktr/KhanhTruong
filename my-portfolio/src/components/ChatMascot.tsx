@@ -113,6 +113,8 @@ export default function ChatMascot() {
     if (mascotState !== "idle") return;
 
     cancelAnimationFrame(animRef.current);
+    // Always face left — destination is left: 20px
+    if (imgRef.current) imgRef.current.style.transform = "scaleX(-1)";
     setMascotState("running");
 
     // After the CSS transition finishes, open chat and show intro
@@ -326,18 +328,6 @@ export default function ChatMascot() {
             >
               Khanh Bot
             </span>
-            {/* Minimize button */}
-            <button
-              onClick={() =>
-                setMascotState((s) => (s === "minimized" ? "open" : "minimized"))
-              }
-              aria-label={
-                mascotState === "minimized" ? "Expand chat" : "Minimize chat"
-              }
-              style={headerBtnStyle}
-            >
-              {mascotState === "minimized" ? "+" : "—"}
-            </button>
             {/* Close button */}
             <button
               onClick={() => {

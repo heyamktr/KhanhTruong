@@ -16,8 +16,6 @@ export const INITIAL_SUGGESTIONS = [
 ];
 
 // ── Q&A pairs ────────────────────────────────────────────────────────
-// To connect to an AI API later, replace getResponse() with an async
-// function that sends `input` to your API and returns BotResponse.
 const QA: Record<string, BotResponse> = {
   journey: {
     answer:
@@ -71,7 +69,7 @@ const QA: Record<string, BotResponse> = {
 
   looking: {
     answer:
-      "I'm actively looking for:\n\n📅 Software engineering internships — Summer/Fall 2026\n🎓 New grad full-time roles starting May 2027\n\nI'm most excited about full-stack, AI/ML, or systems roles at companies that care about engineering quality and real user impact.\n\nOpen to remote or relocation! 📍",
+      "I'm actively looking for:\n\n📅 Software engineering internships — Summer/Fall 2026\n🎓 New grad full-time roles starting May 2028\n\nI'm most excited about full-stack, AI/ML, or systems roles at companies that care about engineering quality and real user impact.\n\nOpen to remote or relocation! 📍",
     suggestions: [
       "How can I contact you?",
       "Where's your resume?",
@@ -81,7 +79,7 @@ const QA: Record<string, BotResponse> = {
 
   skills: {
     answer:
-      "My tech stack:\n\n⚡ Languages: Python, Java, C/C++, TypeScript, JavaScript, SQL\n🖥 Frontend: React.js, Next.js, Tailwind CSS\n⚙️ Backend: Node.js, FastAPI, Express.js\n🗄 Databases: PostgreSQL, MongoDB, Supabase\n☁️ Cloud: AWS (EC2, S3, Cognito), Docker\n🤖 AI/ML: Gemini API, Amazon Nova, OpenCV, Playwright",
+      "My tech stack:\n\n⚡ Languages: Java, Python, C/C++, SQL, TypeScript, JavaScript, Dart, R, Lua/Luau\n🖥 Frontend: React.js, Next.js, TailwindCSS, Flutter\n⚙️ Backend: Node.js, FastAPI, OpenCV, pandas, NumPy\n🗄 Databases: PostgreSQL, Amazon Aurora, Supabase, Firebase, MongoDB\n🤖 AI/ML: Gemini API, Amazon Nova, OpenCV, Playwright\n🔧 Tools: Git, Docker, Tableau, Roblox Studio, Raspberry Pi",
     suggestions: [
       "What's your best project?",
       "Tell me about your experience",
@@ -91,7 +89,7 @@ const QA: Record<string, BotResponse> = {
 
   experience: {
     answer:
-      "Current & recent roles:\n\n💼 SWE Intern @ InstaLab (Jun–Aug 2026) — Java microservices, React dashboards, PostgreSQL. 40% latency reduction.\n\n🔬 Research Assistant @ DePauw (2025–Present) — Computer vision system in C++/OpenCV on Raspberry Pi. Sub-100ms latency, 40-person user study.\n\n🎮 SWE Intern @ LECO Studio (2025) — Roblox game UIs used by 14,000+ players.\n\n👨‍💻 Technical Director @ DePauw Tutoring — Built scheduling platform for 120+ students. 100% adoption in 6 weeks.",
+      "Current & recent roles:\n\n💼 SWE Intern @ IpserLab (May–Aug 2026) — Java microservices, React dashboards, PostgreSQL. 40% latency reduction.\n\n🔬 Research Assistant @ DePauw (Jan 2025–Present) — Computer vision system in C++/OpenCV on Raspberry Pi. Sub-100ms latency, 40-person user study.\n\n🎮 SWE Intern @ LECO Studio (2025) — Roblox game UIs used by 14,000+ players.\n\n👨‍💻 Teaching Assistant @ DePauw — Supported 30+ students in CS 121 and CS 125.",
     suggestions: [
       "What's your education?",
       "What are you looking for?",
@@ -101,7 +99,7 @@ const QA: Record<string, BotResponse> = {
 
   education: {
     answer:
-      "🎓 DePauw University — Greencastle, Indiana\nB.A. Computer Science & Mathematics\nGPA: 3.78 | Graduating May 2027\n\nCoursework: Data Structures (C++), AI, Software Design (OOP), Linear Algebra, Computer Security, Mobile Development, Computer Systems\n\nActivities: President of Google Developer Groups on Campus, IT Associates Program",
+      "🎓 DePauw University — Greencastle, Indiana\nB.A. Computer Science & Mathematics\nGPA: 3.82 | Graduating May 2028\n\nCoursework: Data Structures (C++), AI, Software Design (OOP), Linear Algebra, Computer Security, Mobile Development, Computer Systems\n\nActivities: President of Google Developer Groups on Campus, IT Associates Program, CodeMely",
     suggestions: [
       "Tell me about your experience",
       "What are you looking for?",
@@ -131,7 +129,7 @@ const QA: Record<string, BotResponse> = {
 
   availability: {
     answer:
-      "Availability:\n\n📅 Currently interning at InstaLab (Jun–Aug 2026)\n📅 Available for new roles from September 2026\n🎓 Open to new grad full-time roles from May 2027\n\nOpen to remote, hybrid, or in-person. US-based preferred but open to discussions!",
+      "Availability:\n\n📅 Currently interning at IpserLab (May–Aug 2026)\n📅 Available for new roles from September 2026\n🎓 Open to new grad full-time roles from May 2028\n\nOpen to remote, hybrid, or in-person. US-based preferred but open to discussions!",
     suggestions: [
       "How can I contact you?",
       "What are you looking for?",
@@ -147,7 +145,6 @@ const QA: Record<string, BotResponse> = {
 };
 
 // ── Keyword matcher ──────────────────────────────────────────────────
-// Replace this function with an async AI API call when you're ready.
 export function getResponse(input: string): BotResponse {
   const q = input.toLowerCase();
 

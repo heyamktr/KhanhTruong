@@ -55,8 +55,10 @@ export default function About() {
   return (
     <section
       id="about"
+      className="section-white"
       style={{
         position: "relative",
+        zIndex: 10,
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
@@ -64,7 +66,6 @@ export default function About() {
         justifyContent: "center",
         padding: "5rem 1.25rem",
         overflow: "hidden",
-        background: "#0C0C0C",
       }}
     >
       {/* Floating decorative images */}
@@ -134,7 +135,6 @@ export default function About() {
       >
         <FadeIn>
           <h2
-            className="hero-heading"
             style={{
               fontWeight: 900,
               textTransform: "uppercase",
@@ -142,6 +142,7 @@ export default function About() {
               letterSpacing: "-0.025em",
               textAlign: "center",
               fontSize: "clamp(3rem, 12vw, 160px)",
+              color: "#0C0C0C",
             }}
           >
             About me
@@ -159,7 +160,7 @@ export default function About() {
           <p
             ref={parasRef}
             style={{
-              color: "#D7E2EA",
+              color: "#0C0C0C",
               fontWeight: 500,
               textAlign: "center",
               lineHeight: 1.625,

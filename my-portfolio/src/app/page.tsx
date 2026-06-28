@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import StickyNav from "@/components/StickyNav";
+import Marquee from "@/components/Marquee";
 import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
@@ -11,6 +12,7 @@ export default function Home() {
     <main style={{ background: "#0c0c0c", overflowX: "clip" }}>
       <StickyNav />
       <Hero />
+      <Marquee />
       <Skills />
       <Experience />
       <Projects />

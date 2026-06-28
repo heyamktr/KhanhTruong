@@ -55,19 +55,22 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="section-dark-overlay"
+      className="section-white"
       style={{
+        marginTop: "-2.5rem",
+        position: "relative",
+        zIndex: 30,
         padding: "5rem clamp(1.25rem, 3vw, 2.5rem) 10rem",
       }}
     >
       <FadeIn>
         <h2
-          className="hero-heading"
           style={{
             fontWeight: 900,
             textTransform: "uppercase",
             textAlign: "center",
-            fontSize: "clamp(3rem, 12vw, 160px)",
+            fontSize: "clamp(2rem, 5vw, 72px)",
+            color: "#0C0C0C",
             letterSpacing: "-0.025em",
             lineHeight: 1,
             marginBottom: "3rem",

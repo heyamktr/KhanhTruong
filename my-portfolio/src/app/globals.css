@@ -30,7 +30,7 @@ body {
 
 /* ── Gradient heading ─────────────────────────── */
 .hero-heading {
-  background: linear-gradient(180deg, #646973 0%, #bbccd7 100%);
+  background: linear-gradient(160deg, #ffffff 30%, #00a8b6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -255,6 +255,9 @@ body {
 .svc-item + .svc-item {
   border-top: 1px solid rgba(12, 12, 12, 0.15);
 }
+.svc-item--light + .svc-item--light {
+  border-top: 1px solid rgba(215, 226, 234, 0.15);
+}
 @media (min-width: 640px) {
   .svc-item {
     gap: 2rem;
@@ -268,10 +271,22 @@ body {
   }
 }
 
+/* ── Sticky nav responsive ────────────────────── */
+.sticky-nav-desktop {
+  display: flex;
+}
+.sticky-nav-hamburger {
+  display: none;
+}
+@media (max-width: 768px) {
+  .sticky-nav-desktop { display: none !important; }
+  .sticky-nav-hamburger { display: flex !important; }
+}
+
 /* ── Project sticky cards ─────────────────────── */
 .proj-card {
   position: sticky;
-  border: 2px solid #d7e2ea;
+  border: 1px solid rgba(12, 12, 12, 0.12);
   background: #0c0c0c;
   border-radius: 40px;
   padding: 1rem;

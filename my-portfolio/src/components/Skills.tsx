@@ -7,7 +7,7 @@ const SKILL_CATEGORIES = [
   },
   {
     label: "Frameworks & Libraries",
-    items: ["React.js", "Node.js", "FastAPI", "TailwindCSS", "OpenCV", "pandas", "NumPy", "Matplotlib"],
+    items: ["React.js", "React Native", "Next.js", "Flutter", "FastAPI", "Node.js", "TailwindCSS", "OpenCV", "pandas", "NumPy", "Matplotlib"],
   },
   {
     label: "Databases & Cloud",
@@ -15,7 +15,7 @@ const SKILL_CATEGORIES = [
   },
   {
     label: "Tools & Platforms",
-    items: ["Git", "Docker", "Playwright", "Tableau", "Roblox Studio", "Raspberry Pi", "Google Maps API", "Amazon Nova API", "Gemini API"],
+    items: ["Git", "Docker", "Playwright", "Tableau", "Roblox Studio", "Raspberry Pi", "Google Maps API", "Google Places API", "Amazon Nova API", "Claude API", "Gemini API"],
   },
 ];
 

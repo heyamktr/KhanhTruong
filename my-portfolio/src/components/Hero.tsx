@@ -9,8 +9,8 @@ const BIO =
 
 const STATS = [
   { number: "3.82", label: "GPA" },
-  { number: "14K+", label: "Players Reached" },
-  { number: "40%", label: "Latency Reduced" },
+  { number: "5.97×", label: "AI Inference Speedup" },
+  { number: "35%", label: "CV Latency Reduced" },
   { number: "300+", label: "Students Impacted" },
 ];
 

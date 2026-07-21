@@ -12,7 +12,20 @@ const kanit = Kanit({
 export const metadata: Metadata = {
   title: "Khanh Truong | Software Engineer",
   description:
-    "Portfolio of Khanh Truong — software engineer building systems across web, AI, and mobile.",
+    "Portfolio of Khanh Truong, a Computer Science and Mathematics student at DePauw University with experience in full-stack development, AI integration, computer vision, mobile applications, and software engineering research.",
+  openGraph: {
+    title: "Khanh Truong | Software Engineer",
+    description:
+      "Computer Science & Mathematics student at DePauw University building across full-stack web, AI, and mobile. GPA 3.82, graduating May 2028.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary",
+    title: "Khanh Truong | Software Engineer",
+    description:
+      "Computer Science & Mathematics student at DePauw University building across full-stack web, AI, and mobile.",
+  },
 };
 
 export default function RootLayout({

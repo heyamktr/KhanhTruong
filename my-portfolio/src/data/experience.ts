@@ -4,13 +4,13 @@ export const experience = [
     org: "IpserLab, LLC",
     date: "May 2026 – Aug 2026, Remote",
     description:
-      "Building Java microservices, real-time analytics dashboards, and testing infrastructure for customer-facing full-stack features.",
+      "Built a mobile app in React Native and FastAPI that scans grocery receipts, tracks food inventory, and suggests meals using the Claude API.",
     bullets: [
-      "Designing and implementing a RESTful microservice in Java to replace a legacy monolithic data pipeline, reducing projected query latency by 40% across 3 internal PostgreSQL databases via optimized JDBC connection pooling and indexed schema restructuring.",
-      "Building a React dashboard for real-time product analytics, integrating 5+ backend API endpoints and collaborating with a 3-person cross-functional team to ship an MVP ahead of a Q3 2026 investor demo.",
-      "Owning end-to-end testing infrastructure for a full-stack customer-facing feature, writing unit, integration, and regression test suites that reduced bug escape rate by 30% in pre-release QA cycles.",
+      "Built a mobile app on React Native (TypeScript) and FastAPI (Python) that scans grocery receipts, tracks household food inventory, and suggests meals from those ingredients via the Claude API.",
+      "Connected the app to the backend through 8 REST API endpoints with synchronization under 1 second, and added 12 error screens so the app shows a clear message instead of crashing.",
+      "Cut AI recipe truncation from ~30% to <2% by tuning Claude API settings (max_tokens, prompt structure) and migrating from SQLite to PostgreSQL.",
     ],
-    tags: ["Java", "React", "PostgreSQL", "JDBC", "Testing"],
+    tags: ["React Native", "TypeScript", "FastAPI", "Python", "Claude API", "PostgreSQL"],
     logo: null,
     image: null,
     repoUrl: "#",
@@ -18,7 +18,7 @@ export const experience = [
   {
     role: "Research Assistant",
     org: "Tangible Learning Platform, DePauw University",
-    date: "Jan 2025 - Present",
+    date: "Jan 2025 – Present",
     description:
       "Building an interactive tangible programming system for children using computer vision and embedded hardware.",
     bullets: [
@@ -34,49 +34,31 @@ export const experience = [
   {
     role: "Software Engineering Intern",
     org: "LECO Studio",
-    date: "May 2025 - Aug 2025",
+    date: "May 2025 – Aug 2025, Ho Chi Minh City",
     description:
-      "Shipped gameplay UI systems for live Roblox titles used by thousands of players.",
+      "Built a privacy-first Chrome MV3 extension that translates American Sign Language into spoken voice in real time during Google Meet, Zoom, Teams, and Messenger.",
     bullets: [
-      "Developed responsive HUDs, menus, and inventory systems for Cave Miner Simulator and Miner Colony using Lua, TypeScript, and Roblox Studio.",
-      "Implemented gameplay interfaces supporting multi-world exploration, 100+ collectible tools and pets, and scalable progression systems.",
-      "Delivered front-end features used by 14,000+ players, improving UI responsiveness and gameplay usability.",
+      "Built a Chrome MV3 extension that sends only 144 landmark floats per frame (no video) over WebSocket to a FastAPI inference server, enabling real-time ASL-to-speech translation across Google Meet, Zoom, Teams, and Messenger.",
+      "Trained a bidirectional GRU (558K parameters) on WLASL achieving 63.18% Top-1 / 81.59% Top-3 accuracy; exported to ONNX Runtime for 5.97× faster inference (2.57ms median) with an LFU prediction cache.",
+      "Bypassed Chrome MV3's content-script sandbox via a two-world MediaPipe bridge, and overrode getUserMedia with the Web Audio API to inject synthesized speech directly into the meeting's microphone stream.",
     ],
-    tags: ["Lua", "TypeScript", "Roblox Studio", "Game UI"],
+    tags: ["Python", "PyTorch", "ONNX", "JavaScript", "Chrome MV3", "MediaPipe", "FastAPI", "WebSocket"],
     logo: "/images/logos/lecoStudio.jpg",
-    image: null,
-    repoUrl: "#",
-  },
-  {
-    role: "Technical Director",
-    org: "Student Tutors Program, DePauw University",
-    date: "Sep 2025 - Present",
-    description:
-      "Built and launched the scheduling platform that runs the university tutoring program.",
-    bullets: [
-      "Built and deployed a full-stack scheduling platform using React, Node.js, PostgreSQL, and AWS EC2.",
-      "Enabled 120+ students to book sessions across 40+ tutors with real-time availability tracking.",
-      "Drove 100% program-wide adoption within 6 weeks and reduced average scheduling time by 50%.",
-    ],
-    tags: ["React", "Node.js", "PostgreSQL", "AWS EC2"],
-    logo: "/images/logos/DPU.png",
-
     image: null,
     repoUrl: "#",
   },
   {
     role: "Teaching Assistant",
     org: "Department of Computer Science, DePauw University",
-    date: "Jan 2025 - Jan 2026",
+    date: "Jan 2025 – Jan 2026",
     description:
       "Supported foundational CS courses with code reviews, debugging help, tutoring, and lab instruction.",
     bullets: [
-      "Supported 30+ students in CS121: Intro to Computer Science and CS125: Software Design (OOP).",
-      "Worked primarily in Java while helping students debug projects and strengthen object-oriented programming fundamentals.",
+      "Supported 30+ students in CS 121: Intro to Computer Science and CS 125: Software Design (OOP).",
+      "Provided code reviews, debugging sessions, and lab instruction working primarily in Java and object-oriented programming.",
     ],
     tags: ["Java", "Teaching", "Mentoring", "OOP"],
     logo: "/images/logos/DPU.png",
-
     image: null,
     repoUrl: "#",
   },

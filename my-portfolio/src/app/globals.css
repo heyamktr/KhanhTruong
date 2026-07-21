@@ -321,3 +321,196 @@ body {
     border-radius: 40px;
   }
 }
+
+/* ── Project card v2 layout ───────────────────────── */
+
+/* Header row: number · title block · buttons */
+.proj-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  margin-bottom: clamp(0.875rem, 1.6vw, 1.35rem);
+  flex-wrap: wrap;
+}
+
+/* Large number — reduced to a label, not a hero */
+.proj-num {
+  font-weight: 900;
+  color: #d7e2ea;
+  line-height: 1;
+  font-size: clamp(1.5rem, 3.2vw, 2.75rem);
+  flex-shrink: 0;
+  opacity: 0.28;
+  letter-spacing: -0.02em;
+  padding-top: 0.1em;
+}
+
+/* Title block */
+.proj-title-block {
+  flex: 1;
+  min-width: 0;
+}
+.proj-category {
+  font-size: clamp(0.58rem, 0.85vw, 0.68rem);
+  color: #d7e2ea;
+  opacity: 0.38;
+  letter-spacing: 0.16em;
+  margin-bottom: 0.2rem;
+  font-weight: 500;
+}
+.proj-title {
+  font-size: clamp(1.1rem, 2.2vw, 1.85rem);
+  color: #d7e2ea;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin: 0 0 0.35rem;
+}
+.proj-desc {
+  font-size: clamp(0.78rem, 1.05vw, 0.9rem);
+  color: #d7e2ea;
+  opacity: 0.55;
+  line-height: 1.6;
+  margin: 0 0 0.65rem;
+  font-weight: 300;
+  max-width: 56ch;
+}
+.proj-tags {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+/* Action buttons */
+.proj-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+/* Compact button size inside card header — overrides btn-outline responsive padding */
+.proj-actions .btn-outline {
+  padding: 0.45rem 1.1rem !important;
+  font-size: clamp(0.62rem, 0.88vw, 0.78rem) !important;
+}
+
+/* Primary button override — white fill on dark card */
+.proj-btn-primary {
+  background: #ffffff !important;
+  color: #0c0c0c !important;
+  border-color: #ffffff !important;
+}
+.proj-btn-primary:hover {
+  background: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* Body: 40 / 60 two-column grid — content drives height */
+.proj-body {
+  display: grid;
+  grid-template-columns: 40fr 60fr;
+  gap: clamp(0.625rem, 1vw, 0.875rem);
+}
+
+/* Left info panel — no overflow clipping, content-height driven */
+.proj-info-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(0.875rem, 1.4vw, 1.2rem);
+  padding: clamp(1rem, 1.6vw, 1.35rem);
+  background: rgba(215, 226, 234, 0.04);
+  border-radius: 20px;
+  border: 1px solid rgba(215, 226, 234, 0.07);
+}
+@media (min-width: 640px) {
+  .proj-info-panel { border-radius: 24px; }
+}
+@media (min-width: 768px) {
+  .proj-info-panel { border-radius: 28px; }
+}
+
+/* Right image panel — min-height ensures image is always visible */
+.proj-image-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(215, 226, 234, 0.1);
+  background: rgba(215, 226, 234, 0.04);
+  min-height: 320px;
+}
+@media (min-width: 640px) {
+  .proj-image-wrap { border-radius: 24px; }
+}
+@media (min-width: 768px) {
+  .proj-image-wrap { border-radius: 28px; }
+}
+
+/* Image hover scale */
+.proj-image-wrap img {
+  transition: transform 0.4s ease;
+}
+.proj-image-wrap:hover img {
+  transform: scale(1.03);
+}
+
+/* Screenshot carousel dots */
+.proj-img-dots {
+  position: absolute;
+  bottom: 0.875rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.4rem;
+  z-index: 2;
+}
+.proj-img-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: rgba(215, 226, 234, 0.32);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s;
+}
+.proj-img-dot.active,
+.proj-img-dot:hover {
+  background: #d7e2ea;
+}
+.proj-img-dot:focus-visible {
+  outline: 2px solid #d7e2ea;
+  outline-offset: 2px;
+}
+
+/* Tablet: keep two columns */
+@media (min-width: 641px) and (max-width: 900px) {
+  .proj-body { grid-template-columns: 42fr 58fr; }
+}
+
+/* Mobile: stack — image first, then info */
+@media (max-width: 640px) {
+  .proj-body {
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+    gap: 0.75rem;
+  }
+  .proj-image-wrap {
+    order: -1;
+    min-height: 220px;
+    max-height: 300px;
+  }
+  .proj-actions {
+    width: 100%;
+  }
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .proj-image-wrap img { transition: none !important; }
+  .proj-image-wrap:hover img { transform: none !important; }
+  .proj-img-dot { transition: none; }
+}

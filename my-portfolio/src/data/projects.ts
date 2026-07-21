@@ -1,4 +1,22 @@
-export const projects = [
+export interface ProjectData {
+  title: string;
+  description: string;
+  fullDescription: string;
+  details: string[];
+  features: string[];
+  tags: string[];
+  image: string;
+  liveUrl: string;
+  sourceUrl: string;
+  // Case-study fields (populated for featured projects)
+  category?: string;
+  challenge?: string;
+  contributions?: string[];
+  role?: string;
+  images?: string[]; // additional screenshots for carousel
+}
+
+export const projects: ProjectData[] = [
   {
     title: "Tiger Time",
     description:
@@ -62,11 +80,21 @@ export const projects = [
     image: "/images/thumbnails/GoGreencastle.png",
     liveUrl: "#",
     sourceUrl: "https://github.com/heyamktr/VKLTigerhack",
+    category: "Full-Stack · Local Discovery",
+    challenge:
+      "Students and residents had no single platform to find local events and businesses — everything required manually searching across multiple scattered sources with no unified view.",
+    contributions: [
+      "Full-stack data aggregation pipeline from external sources",
+      "Server-side API routes with normalized JSON structure",
+      "MongoDB integration for persistent event and listing queries",
+      "Dynamic routing for event and business detail pages",
+    ],
+    role: "Full-stack development, API design, data ingestion pipeline, and database integration.",
   },
   {
     title: "Agentic Shopping Assistant",
     description:
-      "AI-powered shopping agent that understands user needs, compares products across sources, and ranks results with structured signals.",
+      "An AI-powered B2B shopping platform that searches, evaluates, and ranks products according to a user's budget, quality requirements, and delivery constraints.",
     fullDescription:
       "A multi-step product discovery system that turns vague user intent into ranked recommendations using structured retrieval, LLM planning, and review synthesis across multiple sources.",
     details: [
@@ -79,10 +107,20 @@ export const projects = [
       "Search and ranking APIs backed by Aurora PostgreSQL",
       "Review aggregation pipeline combining multiple external signals",
     ],
-    tags: ["Python", "Amazon Nova", "FastAPI", "React", "Playwright", "PostgreSQL"],
+    tags: ["React", "FastAPI", "Python", "Amazon Nova", "PostgreSQL", "Playwright"],
     image: "/images/thumbnails/AgenCart.png",
     liveUrl: "#",
     sourceUrl: "https://github.com/giabach1106/Agentic-Shopping-Assistant",
+    category: "AI Commerce · Amazon Nova Hackathon",
+    challenge:
+      "Traditional shopping tools struggle to process several requirements such as price, ratings, quality, and delivery time simultaneously.",
+    contributions: [
+      "AI-powered natural-language product search with Amazon Nova",
+      "Constraint-based product ranking by price, delivery, and reviews",
+      "Review aggregation from Amazon, Reddit, and TikTok",
+      "Full-stack implementation: FastAPI + React + Aurora PostgreSQL",
+    ],
+    role: "Full-stack development, AI integration, backend API design, product-data collection, and user-interface implementation.",
   },
   {
     title: "POV-AI Landmark Discovery App",
@@ -104,6 +142,16 @@ export const projects = [
     image: "/images/thumbnails/POV.png",
     liveUrl: "#",
     sourceUrl: "https://github.com/phamthucquyen/POV",
+    category: "Mobile Development · AI Vision",
+    challenge:
+      "Existing travel apps rely on manual text searches — there was no conversational, camera-first way to instantly identify landmarks and explore surroundings in real time.",
+    contributions: [
+      "Camera-based landmark recognition via Gemini Vision API",
+      "Multi-turn conversational AI for follow-up questions",
+      "Geospatial context with nearby events and restaurant discovery",
+      "Flutter mobile frontend with Supabase authentication",
+    ],
+    role: "Solo developer covering mobile UI, Python backend, AI integration, and geospatial feature implementation.",
   },
   {
     title: "AI Workflow Automation System",
@@ -125,5 +173,43 @@ export const projects = [
     image: "/images/thumbnails/lecoautomation.png",
     liveUrl: "#",
     sourceUrl: "https://github.com/heyamktr",
+  },
+  {
+    title: "PitchBook",
+    description:
+      "Full-stack soccer field booking and matchmaking platform tested with five pitch owners in District 2, Ho Chi Minh City. Not affiliated with PitchBook Data.",
+    fullDescription:
+      "PitchBook is a full-stack platform connecting players with field owners for booking and matchmaking. It supports public and private lobbies, automatic matching, real-time chat, and a bilingual English/Vietnamese UI — tested end-to-end with real pitch owners in Ho Chi Minh City.",
+    details: [
+      "JWT authentication and role-based access control for owners and players.",
+      "Owner dashboards for managing field availability and scheduling.",
+      "Public and private matchmaking lobbies with automatic player matching.",
+      "Prisma transactions preventing double-booking under concurrent requests.",
+      "Real-time chat and notifications via Socket.io.",
+      "Bilingual UI with 180+ translation keys (English and Vietnamese).",
+    ],
+    features: [
+      "JWT auth with role-based access for owners and players",
+      "Matchmaking lobbies with automatic player pairing",
+      "Prisma transactions for concurrency-safe booking",
+      "Real-time chat via Socket.io",
+      "English/Vietnamese i18n with 180+ translation keys",
+    ],
+    tags: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Socket.io", "JWT"],
+    image: "",
+    liveUrl: "#",
+    sourceUrl: "#",
+    category: "Full-Stack · Sports Tech",
+    challenge:
+      "Field owners in Ho Chi Minh City had no digital tool to manage bookings, and players had no platform to find opponents or reserve pitches — everything was done through personal contacts and messaging apps.",
+    contributions: [
+      "JWT authentication with role-based access (owner vs. player)",
+      "Owner dashboards for availability management",
+      "Public and private matchmaking with automatic lobby matching",
+      "Prisma transactions preventing double-booking under concurrent requests",
+      "Real-time chat and notifications via Socket.io",
+      "Bilingual UI with 180+ translation keys (English/Vietnamese)",
+    ],
+    role: "Solo developer — designed and built the full system including auth, booking engine, matchmaking, real-time features, and localization.",
   },
 ];

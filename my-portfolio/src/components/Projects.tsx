@@ -5,26 +5,20 @@ import { useEffect, useState } from "react";
 import FadeIn from "./FadeIn";
 import { projects, type ProjectData } from "@/data/projects";
 
-// Featured: PitchBook [6], Agentic Shopping [3], POV-AI [4]
-const FEATURED = [projects[6], projects[3], projects[4]];
+const FEATURED_TITLES = ["PitchBook", "Agentic Shopping Assistant", "POV-AI Landmark Discovery App"];
+
+const FEATURED = FEATURED_TITLES
+  .map((title) => projects.find((p) => p.title === title)!)
+  .filter(Boolean);
+
+const REST = projects.filter((p) => !FEATURED_TITLES.includes(p.title));
 
 const CARD_TOPS = {
   mobile: [96, 156, 216],   // 60px gap — clears 40px mobile border-radius
   desktop: [128, 204, 280], // 76px gap — clears 60px desktop border-radius
 };
 
-// ── Shared text styles ────────────────────────────────────────────
-const secLabel: React.CSSProperties = {
-  fontSize: "clamp(0.6rem, 0.82vw, 0.68rem)",
-  fontWeight: 700,
-  color: "#D7E2EA",
-  opacity: 0.58,
-  textTransform: "uppercase",
-  letterSpacing: "0.16em",
-  marginBottom: "0.45rem",
-  display: "block",
-};
-
+// ── Shared text styles ──────────────────────────────────────────
 const secBody: React.CSSProperties = {
   fontSize: "clamp(0.78rem, 1.05vw, 0.9rem)",
   fontWeight: 400,
@@ -47,7 +41,44 @@ const tagStyle: React.CSSProperties = {
   whiteSpace: "nowrap",
 };
 
-// ── ProjectCard ───────────────────────────────────────────────────
+// ── MoreProjectCard (compact grid tile) ─────────────────────────
+function MoreProjectCard({ project, num }: { project: ProjectData; num: number }) {
+  const githubUrl = project.sourceUrl !== "#" ? project.sourceUrl : null;
+  const demoUrl = project.liveUrl !== "#" ? project.liveUrl : null;
+
+  return (
+    <article className="more-card">
+      <div className="more-card-top">
+        <span className="more-card-num">0{num}</span>
+        <h3 className="more-card-title">{project.title}</h3>
+        <p className="more-card-desc">{project.description}</p>
+      </div>
+      <div className="more-card-bottom">
+        <div className="proj-tags" role="list">
+          {project.tags.map((tag) => (
+            <span key={tag} style={tagStyle} role="listitem">{tag}</span>
+          ))}
+        </div>
+        {(demoUrl || githubUrl) && (
+          <div className="more-card-links">
+            {demoUrl && (
+              <a href={demoUrl} target="_blank" rel="noreferrer" className="more-card-link">
+                Demo ↗
+              </a>
+            )}
+            {githubUrl && (
+              <a href={githubUrl} target="_blank" rel="noreferrer" className="more-card-link">
+                GitHub ↗
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
+// ── ProjectCard ─────────────────────────────────────────────────
 function ProjectCard({
   project,
   index,
@@ -63,6 +94,7 @@ function ProjectCard({
 }) {
   const images = project.images ?? (project.image ? [project.image] : []);
   const [activeImg, setActiveImg] = useState(0);
+  const bullets = project.contributions ?? project.features ?? [];
 
   const demoUrl = project.liveUrl !== "#" ? project.liveUrl : null;
   const githubUrl = project.sourceUrl !== "#" ? project.sourceUrl : null;
@@ -71,25 +103,23 @@ function ProjectCard({
     <article
       id={cardId}
       className="proj-card"
-      style={{ top: topMobile }}
+      style={
+        {
+          "--card-top-sm": `${topMobile}px`,
+          "--card-top-md": `${topDesktop}px`,
+        } as React.CSSProperties
+      }
       aria-label={`Project ${index + 1}: ${project.title}`}
     >
-      <style>{`@media (min-width: 768px) { #${cardId} { top: ${topDesktop}px; } }`}</style>
 
-      {/* ── Header ── */}
+      {/* ── Header: index label · category · title · tags ── */}
       <header className="proj-card-header">
-        {/* Reduced-dominance project number */}
-        <span className="proj-num" aria-hidden="true">
-          0{index + 1}
-        </span>
-
-        {/* Category · Title · Description · Tags */}
         <div className="proj-title-block">
-          {project.category && (
-            <p className="proj-category">{project.category.toUpperCase()}</p>
-          )}
+          <p className="proj-category">
+            <span className="proj-num-inline">0{index + 1}</span>
+            {project.category ? ` · ${project.category.toUpperCase()}` : ""}
+          </p>
           <h3 className="proj-title">{project.title}</h3>
-          <p className="proj-desc">{project.description}</p>
           <div className="proj-tags" role="list" aria-label="Technologies used">
             {project.tags.map((tag) => (
               <span key={tag} style={tagStyle} role="listitem">
@@ -98,109 +128,12 @@ function ProjectCard({
             ))}
           </div>
         </div>
-
-        {/* Action buttons */}
-        <div className="proj-actions">
-          {demoUrl && (
-            <a href={demoUrl} target="_blank" rel="noreferrer">
-              <button
-                className="btn-outline proj-btn-primary"
-                aria-label={`View live demo of ${project.title}`}
-              >
-                View Demo
-              </button>
-            </a>
-          )}
-          {githubUrl && (
-            <a href={githubUrl} target="_blank" rel="noreferrer">
-              <button
-                className="btn-outline"
-                aria-label={`View ${project.title} source code on GitHub`}
-              >
-                GitHub ↗
-              </button>
-            </a>
-          )}
-        </div>
       </header>
 
-      {/* ── Body: 35% info · 65% image ── */}
+      {/* ── Body: image (60) | info (40) ── */}
       <div className="proj-body">
-        {/* Left: case-study info panel */}
-        <div
-          className="proj-info-panel"
-          role="region"
-          aria-label={`${project.title} case study`}
-        >
-          {project.challenge && (
-            <section>
-              <span style={secLabel}>The Challenge</span>
-              <p style={secBody}>{project.challenge}</p>
-            </section>
-          )}
 
-          {project.contributions && project.contributions.length > 0 && (
-            <section>
-              <span style={secLabel}>What I Built</span>
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.3rem",
-                }}
-              >
-                {project.contributions.map((item, i) => (
-                  <li
-                    key={i}
-                    style={{
-                      ...secBody,
-                      display: "flex",
-                      gap: "0.55rem",
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <span
-                      style={{ color: "#D7E2EA", opacity: 0.3, flexShrink: 0, lineHeight: 1.65 }}
-                      aria-hidden="true"
-                    >
-                      —
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {project.role && (
-            <section>
-              <span style={secLabel}>My Role</span>
-              <p style={secBody}>{project.role}</p>
-            </section>
-          )}
-
-          {/* Fallback: show features if no case-study fields provided */}
-          {!project.challenge && !project.contributions && project.features.length > 0 && (
-            <section>
-              <span style={secLabel}>Key Features</span>
-              <ul
-                style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.3rem" }}
-              >
-                {project.features.map((f, i) => (
-                  <li key={i} style={{ ...secBody, display: "flex", gap: "0.55rem" }}>
-                    <span style={{ color: "#D7E2EA", opacity: 0.3, flexShrink: 0 }} aria-hidden="true">—</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </div>
-
-        {/* Right: screenshot / image panel */}
+        {/* Image panel — left on desktop, top on mobile */}
         <div className="proj-image-wrap">
           {images.length > 0 ? (
             <>
@@ -210,7 +143,7 @@ function ProjectCard({
                 fill
                 style={{ objectFit: "cover", objectPosition: "top center" }}
                 priority={index === 0}
-                sizes="(max-width: 640px) 100vw, 65vw"
+                sizes="(max-width: 640px) 100vw, 60vw"
               />
               {images.length > 1 && (
                 <nav className="proj-img-dots" aria-label="Screenshot navigation">
@@ -237,9 +170,57 @@ function ProjectCard({
                 padding: "2rem",
               }}
             >
-              <p style={{ ...secBody, opacity: 0.3, textAlign: "center" }}>
+              <p style={{ ...secBody, opacity: 0.25, textAlign: "center" }}>
                 {project.description}
               </p>
+            </div>
+          )}
+        </div>
+
+        {/* Info panel — right on desktop, bottom on mobile */}
+        <div
+          className="proj-info-panel"
+          role="region"
+          aria-label={`${project.title} details`}
+        >
+          <ul className="proj-bullet-list">
+            {bullets.map((item, i) => (
+              <li key={i} style={{ ...secBody, display: "flex", gap: "0.55rem", alignItems: "flex-start" }}>
+                <span
+                  style={{ color: "#D7E2EA", opacity: 0.28, flexShrink: 0, lineHeight: 1.65 }}
+                  aria-hidden="true"
+                >
+                  —
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+
+          {(demoUrl || githubUrl) && (
+            <div className="proj-actions">
+              {demoUrl && (
+                <a
+                  href={demoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-outline proj-btn-primary"
+                  aria-label={`View live demo of ${project.title}`}
+                >
+                  View Demo
+                </a>
+              )}
+              {githubUrl && (
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-outline"
+                  aria-label={`View ${project.title} source code on GitHub`}
+                >
+                  GitHub ↗
+                </a>
+              )}
             </div>
           )}
         </div>
@@ -248,7 +229,7 @@ function ProjectCard({
   );
 }
 
-// ── Main section ──────────────────────────────────────────────────
+// ── Main section ────────────────────────────────────────────────
 export default function Projects() {
   useEffect(() => {
     const tick = () => {
@@ -313,6 +294,47 @@ export default function Projects() {
           </div>
         );
       })}
+
+      {/* ── More projects grid ─────────────────────────── */}
+      <FadeIn>
+        <div style={{ marginTop: "5rem" }}>
+          {/* Section divider + label */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1.25rem",
+              marginBottom: "2rem",
+            }}
+          >
+            <div style={{ flex: 1, height: "1px", background: "rgba(12,12,12,0.1)" }} />
+            <p
+              style={{
+                fontSize: "clamp(0.7rem, 0.95vw, 0.82rem)",
+                fontWeight: 700,
+                color: "#0C0C0C",
+                opacity: 0.5,
+                textTransform: "uppercase",
+                letterSpacing: "0.18em",
+                whiteSpace: "nowrap",
+                margin: 0,
+              }}
+            >
+              Also built
+            </p>
+            <div style={{ flex: 1, height: "1px", background: "rgba(12,12,12,0.1)" }} />
+          </div>
+          <div className="more-grid">
+            {REST.map((project, i) => (
+              <MoreProjectCard
+                key={project.title}
+                project={project}
+                num={FEATURED.length + i + 1}
+              />
+            ))}
+          </div>
+        </div>
+      </FadeIn>
     </section>
   );
 }

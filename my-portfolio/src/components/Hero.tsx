@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import CountUp from "./CountUp";
 import FadeIn from "./FadeIn";
 
 const BIO =
@@ -35,7 +36,11 @@ const navLinkStyle: React.CSSProperties = {
 
 export default function Hero() {
   const magnetRef = useRef<HTMLDivElement>(null);
+  const orb1Ref = useRef<HTMLDivElement>(null);
+  const orb2Ref = useRef<HTMLDivElement>(null);
+  const orb3Ref = useRef<HTMLDivElement>(null);
 
+  // Portrait magnet effect
   useEffect(() => {
     const el = magnetRef.current;
     if (!el) return;
@@ -47,8 +52,7 @@ export default function Hero() {
       const cy = r.top + r.height / 2;
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
-      const maxD = Math.max(r.width, r.height) / 2 + PAD;
-      if (Math.hypot(dx, dy) < maxD) {
+      if (Math.hypot(dx, dy) < Math.max(r.width, r.height) / 2 + PAD) {
         el.style.transform = `translate3d(${dx / STR}px, ${dy / STR}px, 0)`;
         el.style.transition = "transform 0.3s ease-out";
       } else {
@@ -56,7 +60,6 @@ export default function Hero() {
         el.style.transition = "transform 0.6s ease-in-out";
       }
     };
-
     const onLeave = () => {
       el.style.transform = "translate3d(0,0,0)";
       el.style.transition = "transform 0.6s ease-in-out";
@@ -70,28 +73,115 @@ export default function Hero() {
     };
   }, []);
 
+  // Gradient orb parallax — direct DOM writes, zero re-renders
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (orb1Ref.current) orb1Ref.current.style.transform = `translateY(${y * 0.28}px)`;
+      if (orb2Ref.current) orb2Ref.current.style.transform = `translateY(${-y * 0.2}px)`;
+      if (orb3Ref.current) orb3Ref.current.style.transform = `translateY(${y * 0.13}px)`;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
-      {/* ── Hero viewport ───────────────────────────────────────── */}
+      {/* ── Hero viewport ─────────────────────────────────────── */}
       <section
         id="home"
         style={{
           height: "100vh",
           display: "flex",
           flexDirection: "column",
-          overflowX: "clip",
+          overflow: "hidden",
           position: "relative",
           background: "#0C0C0C",
         }}
       >
-        {/* Nav */}
+        {/* ── Background layer (orbs + dot grid) ─────────────── */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: "none",
+            overflow: "hidden",
+          }}
+        >
+          {/* Dot grid — subtle texture */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                "radial-gradient(rgba(215,226,234,0.065) 1px, transparent 1px)",
+              backgroundSize: "36px 36px",
+            }}
+          />
+
+          {/* Teal orb — top-left, largest */}
+          <div
+            ref={orb1Ref}
+            style={{
+              position: "absolute",
+              width: "clamp(420px, 80vw, 1000px)",
+              height: "clamp(420px, 80vw, 1000px)",
+              borderRadius: "50%",
+              background:
+                "radial-gradient(circle, rgba(0,168,182,0.14) 0%, transparent 60%)",
+              top: "-35%",
+              left: "-18%",
+              willChange: "transform",
+            }}
+          />
+
+          {/* Blue orb — bottom-right, medium */}
+          <div
+            ref={orb2Ref}
+            style={{
+              position: "absolute",
+              width: "clamp(280px, 55vw, 750px)",
+              height: "clamp(280px, 55vw, 750px)",
+              borderRadius: "50%",
+              background:
+                "radial-gradient(circle, rgba(33,118,176,0.11) 0%, transparent 60%)",
+              bottom: "-22%",
+              right: "-8%",
+              willChange: "transform",
+            }}
+          />
+
+          {/* Green orb — center accent, smallest */}
+          <div
+            ref={orb3Ref}
+            style={{
+              position: "absolute",
+              width: "clamp(180px, 32vw, 460px)",
+              height: "clamp(180px, 32vw, 460px)",
+              borderRadius: "50%",
+              background:
+                "radial-gradient(circle, rgba(0,190,124,0.08) 0%, transparent 60%)",
+              top: "28%",
+              right: "26%",
+              willChange: "transform",
+            }}
+          />
+        </div>
+
+        {/* ── Nav ─────────────────────────────────────────────── */}
         <nav
           className="anim-nav"
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            padding: "clamp(1.5rem, 3vw, 2rem) clamp(1.5rem, 3vw, 2.5rem) 0",
+            padding:
+              "clamp(1.5rem, 3vw, 2rem) clamp(1.5rem, 3vw, 2.5rem) 0",
             position: "relative",
             zIndex: 20,
           }}
@@ -104,19 +194,36 @@ export default function Hero() {
               letterSpacing: "0.12em",
               fontSize: "clamp(1rem, 1.5vw, 1.5rem)",
             }}
-            onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.7")}
-            onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
+            onMouseEnter={(e) =>
+              ((e.target as HTMLElement).style.opacity = "0.7")
+            }
+            onMouseLeave={(e) =>
+              ((e.target as HTMLElement).style.opacity = "1")
+            }
           >
             KT
           </a>
-          <div style={{ display: "flex", gap: "clamp(1rem, 2.5vw, 2.5rem)", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "clamp(1rem, 2.5vw, 2.5rem)",
+              alignItems: "center",
+            }}
+          >
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                style={{ ...navLinkStyle, fontSize: "clamp(0.75rem, 1.2vw, 1.2rem)" }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.7")}
-                onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
+                style={{
+                  ...navLinkStyle,
+                  fontSize: "clamp(0.75rem, 1.2vw, 1.2rem)",
+                }}
+                onMouseEnter={(e) =>
+                  ((e.target as HTMLElement).style.opacity = "0.7")
+                }
+                onMouseLeave={(e) =>
+                  ((e.target as HTMLElement).style.opacity = "1")
+                }
               >
                 {link.label}
               </a>
@@ -129,7 +236,10 @@ export default function Hero() {
             >
               <button
                 className="btn-contact"
-                style={{ padding: "0.5rem 1.25rem", fontSize: "clamp(0.65rem, 1vw, 0.875rem)" }}
+                style={{
+                  padding: "0.5rem 1.25rem",
+                  fontSize: "clamp(0.65rem, 1vw, 0.875rem)",
+                }}
               >
                 Resume
               </button>
@@ -137,10 +247,16 @@ export default function Hero() {
           </div>
         </nav>
 
-        {/* Big heading */}
+        {/* ── Big heading ──────────────────────────────────────── */}
         <div
           className="anim-heading"
-          style={{ overflow: "hidden", width: "100%", marginTop: "clamp(1rem, 2vw, -1.25rem)" }}
+          style={{
+            overflow: "hidden",
+            width: "100%",
+            marginTop: "clamp(1rem, 2vw, -1.25rem)",
+            position: "relative",
+            zIndex: 2,
+          }}
         >
           <h1
             className="hero-heading"
@@ -159,14 +275,15 @@ export default function Hero() {
           </h1>
         </div>
 
-        {/* Bottom row: tagline + CTA */}
+        {/* ── Bottom row: tagline + CTA ─────────────────────── */}
         <div
           style={{
             flex: 1,
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "space-between",
-            padding: "0 clamp(1.5rem, 3vw, 2.5rem) clamp(1.75rem, 3vw, 2.5rem)",
+            padding:
+              "0 clamp(1.5rem, 3vw, 2.5rem) clamp(1.75rem, 3vw, 2.5rem)",
             position: "relative",
             zIndex: 20,
           }}
@@ -191,7 +308,7 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Portrait */}
+        {/* ── Portrait ─────────────────────────────────────────── */}
         <div
           style={{
             position: "absolute",
@@ -222,7 +339,7 @@ export default function Hero() {
         </div>
       </section>
 
-      {/* ── About — dark continuation, no visual break ───────────── */}
+      {/* ── About — dark continuation ─────────────────────────── */}
       <section
         id="about"
         style={{
@@ -231,7 +348,7 @@ export default function Hero() {
         }}
       >
         <div style={{ maxWidth: "64rem", margin: "0 auto" }}>
-          {/* Stats row */}
+          {/* Stats row — CountUp animates on scroll-into-view */}
           <FadeIn>
             <div
               style={{
@@ -252,7 +369,7 @@ export default function Hero() {
                       letterSpacing: "-0.025em",
                     }}
                   >
-                    {s.number}
+                    <CountUp value={s.number} />
                   </p>
                   <p
                     style={{
@@ -304,7 +421,8 @@ export default function Hero() {
                 letterSpacing: "0.12em",
               }}
             >
-              DePauw University &mdash; B.A. Computer Science &amp; Mathematics &mdash; GPA 3.82 &mdash; May 2028
+              DePauw University &mdash; B.A. Computer Science &amp; Mathematics
+              &mdash; GPA 3.82 &mdash; May 2028
             </p>
           </FadeIn>
         </div>

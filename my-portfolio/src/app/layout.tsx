@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import ChatMascot from "@/components/ChatMascot";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 const kanit = Kanit({
@@ -36,6 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={kanit.variable}>
       <body>
+        <SmoothScroll />
         {children}
         <ChatMascot />
       </body>

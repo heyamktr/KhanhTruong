@@ -10,143 +10,84 @@ export default function Certifications() {
         marginTop: "-2.5rem",
         position: "relative",
         zIndex: 45,
-        padding: "clamp(4rem, 7vw, 6rem) clamp(1.25rem, 3vw, 2.5rem)",
+        padding: "clamp(5rem, 8vw, 8rem) clamp(1.25rem, 3vw, 2.5rem)",
       }}
     >
       <FadeIn>
-        <h2
-          style={{
-            fontWeight: 900,
-            textTransform: "uppercase",
-            fontSize: "clamp(2rem, 5vw, 72px)",
-            color: "#0C0C0C",
-            letterSpacing: "-0.025em",
-            lineHeight: 1,
-            marginBottom: "clamp(2.5rem, 4vw, 3.5rem)",
-          }}
-        >
-          Certifications
-        </h2>
+        {/* Heading — centered, matches Skills / Projects / Leadership pattern */}
+        <div style={{ textAlign: "center", marginBottom: "clamp(3rem, 5vw, 4rem)" }}>
+          <h2
+            style={{
+              fontWeight: 900,
+              textTransform: "uppercase",
+              fontSize: "clamp(2rem, 5vw, 72px)",
+              color: "#0C0C0C",
+              letterSpacing: "-0.025em",
+              lineHeight: 1,
+            }}
+          >
+            Certifications
+          </h2>
+        </div>
 
-        <div style={{ maxWidth: "56rem" }}>
+        {/* Card list — max-width + auto margin = always centered */}
+        <div style={{ maxWidth: "56rem", margin: "0 auto" }}>
           {certifications.map((cert) => (
-            <div
-              key={cert.name}
-              style={{
-                border: "1.5px solid rgba(12,12,12,0.1)",
-                borderRadius: "20px",
-                padding: "clamp(1.5rem, 2.5vw, 2rem)",
-                display: "grid",
-                gridTemplateColumns: "1fr auto",
-                gap: "1.5rem",
-                alignItems: "start",
-              }}
-            >
-              {/* Left: name, issuer, courses */}
-              <div>
-                <p
-                  style={{
-                    fontSize: "clamp(0.58rem, 0.85vw, 0.68rem)",
-                    fontWeight: 600,
-                    color: "#0C0C0C",
-                    opacity: 0.38,
-                    letterSpacing: "0.16em",
-                    textTransform: "uppercase",
-                    marginBottom: "0.4rem",
-                  }}
-                >
-                  {cert.issuer}
-                </p>
-                <h3
-                  style={{
-                    fontWeight: 800,
-                    fontSize: "clamp(1rem, 1.8vw, 1.45rem)",
-                    color: "#0C0C0C",
-                    letterSpacing: "-0.01em",
-                    lineHeight: 1.2,
-                    marginBottom: "1.25rem",
-                  }}
-                >
-                  {cert.name}
-                </h3>
+            <div key={cert.name} className="cert-card">
 
-                <p
-                  style={{
-                    fontSize: "clamp(0.62rem, 0.85vw, 0.72rem)",
-                    fontWeight: 600,
-                    color: "#0C0C0C",
-                    opacity: 0.38,
-                    letterSpacing: "0.13em",
-                    textTransform: "uppercase",
-                    marginBottom: "0.6rem",
-                  }}
+              {/* ── Left column: identity + verify ── */}
+              <div className="cert-identity">
+                <div>
+                  <p className="cert-label">{cert.issuer}</p>
+                  <h3 className="cert-name">{cert.name}</h3>
+                  <p className="cert-date">{cert.date}</p>
+                </div>
+
+                <a
+                  href={cert.verifyUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ textDecoration: "none", display: "inline-block" }}
                 >
-                  Courses Completed
-                </p>
-                <ul
-                  style={{
-                    listStyle: "none",
-                    padding: 0,
-                    margin: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.3rem",
-                  }}
-                >
+                  <button
+                    className="btn-outline-dark"
+                    style={{
+                      padding: "0.5rem 1.35rem",
+                      fontSize: "clamp(0.62rem, 0.9vw, 0.78rem)",
+                    }}
+                  >
+                    Verify Certificate ↗
+                  </button>
+                </a>
+              </div>
+
+              {/* ── Divider (visible on desktop, hidden on mobile) ── */}
+              <div className="cert-divider" aria-hidden="true" />
+
+              {/* ── Right column: courses ── */}
+              <div className="cert-courses">
+                <p className="cert-label">5 Courses Completed</p>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                   {cert.courses.map((course) => (
                     <li
                       key={course}
                       style={{
-                        fontSize: "clamp(0.75rem, 1vw, 0.875rem)",
+                        fontSize: "clamp(0.76rem, 1.05vw, 0.9rem)",
                         color: "#0C0C0C",
-                        opacity: 0.68,
+                        opacity: 0.65,
                         lineHeight: 1.55,
                         display: "flex",
-                        gap: "0.5rem",
+                        gap: "0.55rem",
                         alignItems: "flex-start",
                       }}
                     >
-                      <span style={{ opacity: 0.35, flexShrink: 0, lineHeight: 1.55 }}>—</span>
+                      <span style={{ opacity: 0.3, flexShrink: 0, lineHeight: 1.55 }}>—</span>
                       {course}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* Right: date + verify link */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-end",
-                  gap: "1rem",
-                  flexShrink: 0,
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "clamp(0.7rem, 0.95vw, 0.8rem)",
-                    fontWeight: 500,
-                    color: "#0C0C0C",
-                    opacity: 0.45,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {cert.date}
-                </p>
-                <a
-                  href={cert.verifyUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ textDecoration: "none" }}
-                >
-                  <button className="btn-outline-dark" style={{ padding: "0.4rem 1rem", fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)" }}>
-                    Verify ↗
-                  </button>
-                </a>
-              </div>
             </div>
           ))}
         </div>

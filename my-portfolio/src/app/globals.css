@@ -286,12 +286,18 @@ body {
 /* ── Project sticky cards ─────────────────────── */
 .proj-card {
   position: sticky;
+  top: var(--card-top-sm);
   border: 1px solid rgba(12, 12, 12, 0.12);
   background: #0c0c0c;
   border-radius: 40px;
   padding: 1rem;
   transform-origin: center top;
   will-change: transform;
+}
+@media (min-width: 768px) {
+  .proj-card {
+    top: var(--card-top-md);
+  }
 }
 @media (min-width: 640px) {
   .proj-card {
@@ -322,32 +328,22 @@ body {
   }
 }
 
-/* ── Project card v2 layout ───────────────────────── */
+/* ── Project card layout ───────────────────────────────────────── */
 
-/* Header row: number · title block · buttons */
+/* Header: category+index label · title · tags (no description, no buttons) */
 .proj-card-header {
-  display: flex;
-  align-items: flex-start;
-  gap: clamp(0.75rem, 1.5vw, 1.25rem);
   margin-bottom: clamp(0.875rem, 1.6vw, 1.35rem);
-  flex-wrap: wrap;
 }
 
-/* Large number — reduced to a label, not a hero */
-.proj-num {
-  font-weight: 900;
-  color: #d7e2ea;
-  line-height: 1;
-  font-size: clamp(1.5rem, 3.2vw, 2.75rem);
-  flex-shrink: 0;
-  opacity: 0.28;
-  letter-spacing: -0.02em;
-  padding-top: 0.1em;
+/* Inline index number — blends into category label */
+.proj-num-inline {
+  font-weight: 700;
+  opacity: 0.5;
+  letter-spacing: 0.04em;
 }
 
 /* Title block */
 .proj-title-block {
-  flex: 1;
   min-width: 0;
 }
 .proj-category {
@@ -355,26 +351,17 @@ body {
   color: #d7e2ea;
   opacity: 0.38;
   letter-spacing: 0.16em;
-  margin-bottom: 0.2rem;
-  font-weight: 500;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
 }
 .proj-title {
-  font-size: clamp(1.1rem, 2.2vw, 1.85rem);
+  font-size: clamp(1.25rem, 2.6vw, 2.1rem);
   color: #d7e2ea;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
-  line-height: 1.1;
-  margin: 0 0 0.35rem;
-}
-.proj-desc {
-  font-size: clamp(0.78rem, 1.05vw, 0.9rem);
-  color: #d7e2ea;
-  opacity: 0.55;
-  line-height: 1.6;
-  margin: 0 0 0.65rem;
-  font-weight: 300;
-  max-width: 56ch;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin: 0 0 0.6rem;
 }
 .proj-tags {
   display: flex;
@@ -382,57 +369,14 @@ body {
   flex-wrap: wrap;
 }
 
-/* Action buttons */
-.proj-actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-
-/* Compact button size inside card header — overrides btn-outline responsive padding */
-.proj-actions .btn-outline {
-  padding: 0.45rem 1.1rem !important;
-  font-size: clamp(0.62rem, 0.88vw, 0.78rem) !important;
-}
-
-/* Primary button override — white fill on dark card */
-.proj-btn-primary {
-  background: #ffffff !important;
-  color: #0c0c0c !important;
-  border-color: #ffffff !important;
-}
-.proj-btn-primary:hover {
-  background: rgba(255, 255, 255, 0.88) !important;
-}
-
-/* Body: 40 / 60 two-column grid — content drives height */
+/* Body: 60 image | 40 info — image dominates, info is focused */
 .proj-body {
   display: grid;
-  grid-template-columns: 40fr 60fr;
+  grid-template-columns: 60fr 40fr;
   gap: clamp(0.625rem, 1vw, 0.875rem);
 }
 
-/* Left info panel — no overflow clipping, content-height driven */
-.proj-info-panel {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: clamp(0.875rem, 1.4vw, 1.2rem);
-  padding: clamp(1rem, 1.6vw, 1.35rem);
-  background: rgba(215, 226, 234, 0.04);
-  border-radius: 20px;
-  border: 1px solid rgba(215, 226, 234, 0.07);
-}
-@media (min-width: 640px) {
-  .proj-info-panel { border-radius: 24px; }
-}
-@media (min-width: 768px) {
-  .proj-info-panel { border-radius: 28px; }
-}
-
-/* Right image panel — min-height ensures image is always visible */
+/* Image panel — left on desktop, top on mobile (first in DOM) */
 .proj-image-wrap {
   position: relative;
   overflow: hidden;
@@ -454,6 +398,61 @@ body {
 }
 .proj-image-wrap:hover img {
   transform: scale(1.03);
+}
+
+/* Info panel — right on desktop, bottom on mobile */
+.proj-info-panel {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1rem, 1.6vw, 1.35rem);
+  background: rgba(215, 226, 234, 0.04);
+  border-radius: 20px;
+  border: 1px solid rgba(215, 226, 234, 0.07);
+}
+@media (min-width: 640px) {
+  .proj-info-panel { border-radius: 24px; }
+}
+@media (min-width: 768px) {
+  .proj-info-panel { border-radius: 28px; }
+}
+
+/* Bullet list — grows to fill panel, pushing buttons down */
+.proj-bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex: 1;
+}
+
+/* Action buttons — anchored to bottom of info panel */
+.proj-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: clamp(1rem, 1.6vw, 1.5rem);
+  padding-top: clamp(0.75rem, 1.2vw, 1rem);
+  border-top: 1px solid rgba(215, 226, 234, 0.1);
+}
+
+/* Compact button size — overrides btn-outline responsive padding */
+.proj-actions .btn-outline {
+  padding: 0.45rem 1.1rem !important;
+  font-size: clamp(0.62rem, 0.88vw, 0.78rem) !important;
+  text-decoration: none;
+}
+
+/* Primary button — white fill on dark card */
+.proj-btn-primary {
+  background: #ffffff !important;
+  color: #0c0c0c !important;
+  border-color: #ffffff !important;
+}
+.proj-btn-primary:hover {
+  background: rgba(255, 255, 255, 0.88) !important;
 }
 
 /* Screenshot carousel dots */
@@ -487,24 +486,22 @@ body {
 
 /* Tablet: keep two columns */
 @media (min-width: 641px) and (max-width: 900px) {
-  .proj-body { grid-template-columns: 42fr 58fr; }
+  .proj-body { grid-template-columns: 58fr 42fr; }
 }
 
-/* Mobile: stack — image first, then info */
+/* Mobile: stack — image on top (natural since it's first in DOM) */
 @media (max-width: 640px) {
   .proj-body {
     display: flex;
     flex-direction: column;
-    min-height: auto;
     gap: 0.75rem;
   }
   .proj-image-wrap {
-    order: -1;
     min-height: 220px;
     max-height: 300px;
   }
   .proj-actions {
-    width: 100%;
+    flex-wrap: wrap;
   }
 }
 
@@ -513,4 +510,185 @@ body {
   .proj-image-wrap img { transition: none !important; }
   .proj-image-wrap:hover img { transform: none !important; }
   .proj-img-dot { transition: none; }
+}
+
+/* ── More projects grid ────────────────────────────── */
+.more-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+}
+@media (min-width: 640px) {
+  .more-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.more-card {
+  background: #0c0c0c;
+  border: 1px solid rgba(215, 226, 234, 0.08);
+  border-radius: 20px;
+  padding: clamp(1.5rem, 2.2vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+/* Teal top accent line */
+.more-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,168,182,0.55), transparent);
+}
+.more-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(215, 226, 234, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.more-card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex: 1;
+  padding-top: 0.25rem;
+}
+
+.more-card-num {
+  font-size: clamp(0.58rem, 0.8vw, 0.68rem);
+  font-weight: 700;
+  color: #d7e2ea;
+  opacity: 0.25;
+  letter-spacing: 0.12em;
+}
+
+.more-card-title {
+  font-size: clamp(1rem, 1.35vw, 1.15rem);
+  font-weight: 800;
+  color: #d7e2ea;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.more-card-desc {
+  font-size: clamp(0.72rem, 0.92vw, 0.8rem);
+  color: #d7e2ea;
+  opacity: 0.45;
+  line-height: 1.65;
+  margin: 0;
+  margin-top: 0.15rem;
+}
+
+.more-card-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+}
+
+/* Text-style links inside more-cards */
+.more-card-links {
+  display: flex;
+  gap: 1.1rem;
+  align-items: center;
+}
+
+.more-card-link {
+  font-size: clamp(0.65rem, 0.88vw, 0.76rem);
+  font-weight: 600;
+  color: #d7e2ea;
+  opacity: 0.45;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: opacity 0.18s;
+}
+.more-card-link:hover {
+  opacity: 1;
+}
+
+/* ── Certifications section ───────────────────────── */
+
+/* Outer card — three-column: identity | divider | courses */
+.cert-card {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0 clamp(2rem, 4vw, 3.5rem);
+  align-items: stretch;
+  border: 1.5px solid rgba(12, 12, 12, 0.1);
+  border-radius: 24px;
+  padding: clamp(1.75rem, 3vw, 2.5rem) clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+/* Identity column — flex column so button anchors to bottom */
+.cert-identity {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* Vertical rule between columns */
+.cert-divider {
+  background: rgba(12, 12, 12, 0.1);
+  align-self: stretch;
+}
+
+/* Courses column */
+.cert-courses {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+/* Shared label style */
+.cert-label {
+  font-size: clamp(0.58rem, 0.85vw, 0.68rem);
+  font-weight: 700;
+  color: #0c0c0c;
+  opacity: 0.38;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0 0 0.45rem;
+}
+
+/* Cert name */
+.cert-name {
+  font-size: clamp(1rem, 1.9vw, 1.5rem);
+  font-weight: 800;
+  color: #0c0c0c;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+/* Issue date */
+.cert-date {
+  font-size: clamp(0.68rem, 0.95vw, 0.8rem);
+  font-weight: 500;
+  color: #0c0c0c;
+  opacity: 0.4;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+/* Mobile: stack identity → divider (horizontal) → courses */
+@media (max-width: 640px) {
+  .cert-card {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1px auto;
+    gap: clamp(1.25rem, 4vw, 1.75rem) 0;
+  }
+  .cert-divider {
+    height: 1px;
+    background: rgba(12, 12, 12, 0.1);
+    align-self: auto;
+  }
 }

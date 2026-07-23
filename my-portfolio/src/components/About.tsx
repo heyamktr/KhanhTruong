@@ -68,7 +68,7 @@ export default function About() {
         overflow: "hidden",
       }}
     >
-      {/* Floating decorative images */}
+      {/* Floating project preview images */}
       <FadeIn
         direction="left"
         delay={0.1}
@@ -76,9 +76,9 @@ export default function About() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://placehold.co/210x210/0d1f2d/bbccd7?text=%3C%2F%3E"
-          alt=""
-          style={{ width: "100%", borderRadius: 16, display: "block" }}
+          src="/images/thumbnails/AgenCart.png"
+          alt="Agentic Shopping Assistant"
+          style={{ width: "100%", borderRadius: 16, display: "block", objectFit: "cover" }}
         />
       </FadeIn>
 
@@ -89,9 +89,9 @@ export default function About() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://placehold.co/180x180/0d1f2d/bbccd7?text=%7B+%7D"
-          alt=""
-          style={{ width: "100%", borderRadius: 16, display: "block" }}
+          src="/images/thumbnails/POV.png"
+          alt="POV-AI Landmark Discovery"
+          style={{ width: "100%", borderRadius: 16, display: "block", objectFit: "cover" }}
         />
       </FadeIn>
 
@@ -102,9 +102,9 @@ export default function About() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://placehold.co/210x210/0d1f2d/bbccd7?text=AI"
-          alt=""
-          style={{ width: "100%", borderRadius: 16, display: "block" }}
+          src="/images/thumbnails/GoGreencastle.png"
+          alt="Greencastle Discovery Platform"
+          style={{ width: "100%", borderRadius: 16, display: "block", objectFit: "cover" }}
         />
       </FadeIn>
 
@@ -115,9 +115,9 @@ export default function About() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://placehold.co/220x220/0d1f2d/bbccd7?text=%E2%96%B6"
-          alt=""
-          style={{ width: "100%", borderRadius: 16, display: "block" }}
+          src="/images/PitchBook.png"
+          alt="PitchBook"
+          style={{ width: "100%", borderRadius: 16, display: "block", objectFit: "cover" }}
         />
       </FadeIn>
 
@@ -170,7 +170,7 @@ export default function About() {
           >
             {BIO.split("").map((ch, i) => (
               <span key={i} className="ch" style={{ opacity: 0.2 }}>
-                {ch === " " ? " " : ch}
+                {ch === " " ? " " : ch}
               </span>
             ))}
           </p>

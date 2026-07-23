@@ -715,3 +715,52 @@ body {
 .more-card-link--github:hover {
   color: #5dd5df !important;
 }
+
+/* ── About — stat cards ──────────────────────────────────────────────────── */
+.stat-card {
+  transition: transform 0.22s ease;
+}
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+.stat-val {
+  color: #D7E2EA;
+  display: inline;
+  transition: color 0.25s ease;
+}
+.stat-card:hover .stat-val {
+  color: #00a8b6;
+}
+.stat-arrow {
+  color: #00a8b6;
+  display: inline-block;
+  animation: arrowBounce 2.4s ease-in-out infinite;
+  transition: color 0.25s ease;
+}
+.stat-card:hover .stat-arrow {
+  color: #5dd5df;
+}
+@keyframes arrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-7px); }
+}
+
+/* About bio + CTA row */
+.about-bio-row {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(2rem, 5vw, 4rem);
+  color: #D7E2EA;
+}
+@media (max-width: 640px) {
+  .about-bio-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stat-arrow { animation: none; }
+  .stat-card  { transition: none; }
+  .stat-card:hover { transform: none; }
+}

@@ -40,6 +40,7 @@ export default function ChatMascot() {
   const mascotRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const animRef = useRef<number>(0);
+  const lastTopicRef = useRef<string | undefined>(undefined);
   // Fixed initial value matches SSR output — actual viewport position set in useEffect
   const posRef = useRef(200);
   const dirRef = useRef(1); // 1 = right, -1 = left
@@ -124,6 +125,7 @@ export default function ChatMascot() {
       setMascotState("open");
       setMessages([{ id: genId(), role: "bot", text: INTRO_MESSAGE }]);
       setSuggestions(INITIAL_SUGGESTIONS);
+      lastTopicRef.current = undefined;
     }, 580);
   }, [mascotState]);
 
@@ -141,11 +143,12 @@ export default function ChatMascot() {
       // Simulate typing delay (swap this setTimeout for an API call later)
       const delay = 800 + Math.random() * 500;
       setTimeout(() => {
-        const res: BotResponse = getResponse(text);
+        const res: BotResponse = getResponse(text, { lastTopicId: lastTopicRef.current });
         setMessages((prev) => [
           ...prev,
           { id: genId(), role: "bot", text: res.answer, actions: res.actions },
         ]);
+        if (res.topicId) lastTopicRef.current = res.topicId;
         setSuggestions(res.suggestions);
         setIsTyping(false);
       }, delay);

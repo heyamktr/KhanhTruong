@@ -6,13 +6,21 @@ import CountUp from "./CountUp";
 import FadeIn from "./FadeIn";
 
 const BIO =
-  "I build across web, AI, and embedded systems — full-stack platforms, AI-powered pipelines, and computer vision on Raspberry Pi. I care about shipping things that real people can actually use.";
+  "I'm a dreamer who believes dreams only matter when we act on them. I stay curious, work harder every day, and keep moving forward through every 'no.' I'm still learning, still growing, and always becoming a better version of myself.";
+
+const HEADLINE = [
+  { text: "A DREAMER WHO DOES.",      opacity: 1,    size: "clamp(2rem, 5.5vw, 5rem)"   },
+  { text: "CURIOUS AT HEART.",        opacity: 0.45, size: "clamp(1.4rem, 3.8vw, 3.4rem)" },
+  { text: "ALWAYS MOVING FORWARD.",   opacity: 0.22, size: "clamp(1rem, 2.8vw, 2.5rem)"  },
+];
+
+const KEYWORDS = ["DREAMER", "DOER", "CURIOUS", "HARDWORKING", "RESILIENT"];
 
 const STATS = [
-  { number: "3.82", label: "GPA" },
-  { number: "5.97×", label: "AI Inference Speedup" },
-  { number: "35%", label: "CV Latency Reduced" },
-  { number: "300+", label: "Students Impacted" },
+  { number: "3.82",  label: "GPA",                        arrow: false, countUp: true  },
+  { number: "GEN Z", label: "PROUDLY",                    arrow: false, countUp: false },
+  { number: "101%",  label: "DAILY EFFORT, STILL RISING", arrow: true,  countUp: true  },
+  { number: "100+",  label: "REJECTIONS, STILL TRYING",   arrow: true,  countUp: true  },
 ];
 
 const NAV_LINKS = [
@@ -348,8 +356,45 @@ export default function Hero() {
         }}
       >
         <div style={{ maxWidth: "64rem", margin: "0 auto" }}>
-          {/* Stats row — CountUp animates on scroll-into-view */}
+
+          {/* ── Three-line headline ─────────────────────────────── */}
           <FadeIn>
+            <div style={{ marginBottom: "clamp(1.25rem, 2.5vw, 2rem)" }}>
+              {HEADLINE.map((line, i) => (
+                <h2
+                  key={i}
+                  style={{
+                    fontWeight: 900,
+                    textTransform: "uppercase",
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1.05,
+                    color: `rgba(215,226,234,${line.opacity})`,
+                    fontSize: line.size,
+                    margin: 0,
+                  }}
+                >
+                  {line.text}
+                </h2>
+              ))}
+            </div>
+
+            {/* Keywords strip */}
+            <p
+              style={{
+                color: "#00a8b6",
+                fontSize: "clamp(0.55rem, 0.9vw, 0.72rem)",
+                fontWeight: 700,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                margin: "0 0 clamp(3rem, 6vw, 4.5rem)",
+              }}
+            >
+              {KEYWORDS.join("  ·  ")}
+            </p>
+          </FadeIn>
+
+          {/* ── Stats row ───────────────────────────────────────── */}
+          <FadeIn delay={0.08}>
             <div
               style={{
                 display: "grid",
@@ -359,27 +404,49 @@ export default function Hero() {
               }}
             >
               {STATS.map((s) => (
-                <div key={s.label}>
-                  <p
-                    style={{
-                      fontSize: "clamp(2.5rem, 5vw, 4rem)",
-                      fontWeight: 900,
-                      color: "#D7E2EA",
-                      lineHeight: 1,
-                      letterSpacing: "-0.025em",
-                    }}
-                  >
-                    <CountUp value={s.number} />
-                  </p>
+                <div
+                  key={s.label}
+                  className="stat-card"
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget.querySelector<HTMLElement>(".stat-num");
+                    if (el) el.style.color = "#00a8b6";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget.querySelector<HTMLElement>(".stat-num");
+                    if (el) el.style.color = "#D7E2EA";
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "0.2rem" }}>
+                    <p
+                      className="stat-num"
+                      style={{
+                        fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                        fontWeight: 900,
+                        lineHeight: 1,
+                        letterSpacing: "-0.025em",
+                        color: "#D7E2EA",
+                        transition: "color 0.25s ease",
+                        margin: 0,
+                      }}
+                    >
+                      {s.countUp ? <CountUp value={s.number} /> : s.number}
+                    </p>
+                    {s.arrow && (
+                      <span className="stat-arrow" style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)", fontWeight: 900 }}>
+                        ↑
+                      </span>
+                    )}
+                  </div>
                   <p
                     style={{
                       marginTop: "0.5rem",
-                      fontSize: "clamp(0.65rem, 1vw, 0.8rem)",
-                      fontWeight: 500,
-                      color: "#D7E2EA",
-                      opacity: 0.45,
+                      fontSize: "clamp(0.58rem, 0.85vw, 0.7rem)",
+                      fontWeight: 600,
+                      color: "rgba(215,226,234,0.4)",
                       textTransform: "uppercase",
                       letterSpacing: "0.12em",
+                      lineHeight: 1.5,
+                      margin: "0.5rem 0 0",
                     }}
                   >
                     {s.label}
@@ -397,34 +464,24 @@ export default function Hero() {
             }}
           />
 
-          <FadeIn delay={0.1}>
+          {/* ── Bio ─────────────────────────────────────────────── */}
+          <FadeIn delay={0.14}>
             <p
               style={{
                 color: "#D7E2EA",
                 fontWeight: 400,
-                lineHeight: 1.75,
-                fontSize: "clamp(1rem, 1.8vw, 1.25rem)",
+                lineHeight: 1.8,
+                fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
                 maxWidth: "44rem",
-                opacity: 0.8,
               }}
             >
               {BIO}
             </p>
-            <p
-              style={{
-                marginTop: "1.75rem",
-                fontSize: "clamp(0.65rem, 1vw, 0.8rem)",
-                fontWeight: 500,
-                color: "#D7E2EA",
-                opacity: 0.35,
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-              }}
-            >
-              DePauw University &mdash; B.A. Computer Science &amp; Mathematics
-              &mdash; GPA 3.82 &mdash; May 2028
-            </p>
+            <a href="#contact" style={{ display: "inline-block", marginTop: "2.5rem" }}>
+              <button className="btn-contact">Let&apos;s Connect</button>
+            </a>
           </FadeIn>
+
         </div>
       </section>
     </>

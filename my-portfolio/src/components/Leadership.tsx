@@ -1,3 +1,4 @@
+import Image from "next/image";
 import FadeIn from "./FadeIn";
 import { leadership } from "@/data/leadership";
 
@@ -61,8 +62,37 @@ export default function Leadership() {
                 flexDirection: "column",
                 gap: "0.625rem",
                 height: "100%",
+                overflow: "hidden",
+                position: "relative",
               }}
             >
+              {/* Org logo */}
+              {item.logo && (
+                <div
+                  style={{
+                    width: 52,
+                    height: 52,
+                    borderRadius: 14,
+                    overflow: "hidden",
+                    background: "rgba(215,226,234,0.06)",
+                    border: "1px solid rgba(215,226,234,0.12)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: "0.25rem",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Image
+                    src={item.logo}
+                    alt={item.org}
+                    width={44}
+                    height={44}
+                    style={{ objectFit: "contain", borderRadius: 10 }}
+                  />
+                </div>
+              )}
+
               <p
                 style={{
                   fontSize: "clamp(1rem, 2vw, 1.4rem)",

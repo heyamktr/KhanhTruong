@@ -196,9 +196,9 @@ export const projects: ProjectData[] = [
       "English/Vietnamese i18n with 180+ translation keys",
     ],
     tags: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Socket.io", "JWT"],
-    image: "",
+    image: "/images/PitchBook.png",
     liveUrl: "#",
-    sourceUrl: "#",
+    sourceUrl: "https://github.com/PhamLeBaDuong/soccer-field-booking-management",
     category: "Full-Stack · Sports Tech",
     challenge:
       "Field owners in Ho Chi Minh City had no digital tool to manage bookings, and players had no platform to find opponents or reserve pitches — everything was done through personal contacts and messaging apps.",

@@ -54,7 +54,7 @@ export const experience = [
     description:
       "Supported foundational CS courses with code reviews, debugging help, tutoring, and lab instruction.",
     bullets: [
-      "Supported 30+ students in CS 121: Intro to Computer Science and CS 125: Software Design (OOP).",
+      "Supported 60+ students in CS 121: Intro to Computer Science and CS 125: Software Design (OOP).",
       "Provided code reviews, debugging sessions, and lab instruction working primarily in Java and object-oriented programming.",
     ],
     tags: ["Java", "Teaching", "Mentoring", "OOP"],

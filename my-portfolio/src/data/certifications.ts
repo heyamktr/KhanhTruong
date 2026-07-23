@@ -4,6 +4,7 @@ export interface CertificationData {
   date: string;
   verifyUrl: string;
   courses: string[];
+  image?: string; // certificate screenshot or badge image
 }
 
 export const certifications: CertificationData[] = [
@@ -11,7 +12,7 @@ export const certifications: CertificationData[] = [
     name: "Google IT Support Professional Certificate",
     issuer: "Google / Coursera",
     date: "September 22, 2024",
-    verifyUrl: "https://coursera.org/verify/professional-cert/8H2YTFIBIF6P",
+    verifyUrl: "https://drive.google.com/file/d/1QHMSmI2NVQcBHyaxaUJ5hylpLn1XyBql/view?usp=sharing",
     courses: [
       "Technical Support Fundamentals",
       "The Bits and Bytes of Computer Networking",

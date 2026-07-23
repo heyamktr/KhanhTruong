@@ -1,512 +1,636 @@
-// ── Types ─────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────
+export interface ChatAction {
+  label: string;
+  href: string;
+}
+
 export interface BotResponse {
   answer: string;
   suggestions: string[];
+  actions?: ChatAction[];
 }
 
-export interface KnowledgeItem {
+interface ChatQAItem {
   id: string;
-  category: string;
-  title: string;
-  summary: string;
-  details: string[];
-  technologies?: string[];
-  metrics?: string[];
-  aliases?: string[];
-  keywords?: string[];
-  suggestions?: string[];
+  question: string;      // canonical text; exact-match trigger after normalisation
+  answer: string;
+  keywords: string[];    // tokens that raise this item's score (+2 each)
+  aliases?: string[];    // additional exact-phrase matches (score +500)
+  followUps: string[];   // up to 3 contextual chips shown after the answer
+  actions?: ChatAction[]; // optional CTA links rendered below the answer
 }
 
-// ── Initial state ─────────────────────────────────────────────────────
+// ── Constants ──────────────────────────────────────────────────────────────
 export const INTRO_MESSAGE =
-  "Hey! I'm Khanh Bot 🤖 Ask me anything about Khanh — his projects, skills, experience, or how to reach him.";
+  "Hey! I'm Khanh Bot 🤖 Ask me about Khanh's experience, skills, projects, or how to reach him.";
 
-export const INITIAL_SUGGESTIONS = [
-  "Tell me about Khanh",
-  "What's his best project?",
-  "What's his tech stack?",
-  "How can I contact him?",
+export const INITIAL_SUGGESTIONS: string[] = [
+  "Give me a quick introduction",
+  "Show me Khanh's experience",
+  "What are his strongest skills?",
+  "Why should we hire Khanh?",
 ];
 
-// ── Knowledge base ────────────────────────────────────────────────────
-const knowledgeBase: KnowledgeItem[] = [
+const FALLBACK_ANSWER =
+  "I'm not sure I have an answer for that yet. You can ask about Khanh's experience, technical skills, projects, research, measurable impact, teaching, or leadership.";
+
+const FALLBACK_SUGGESTIONS: string[] = [
+  "Give me a quick introduction",
+  "Show me Khanh's experience",
+  "What are his strongest skills?",
+];
+
+const RESUME_URL =
+  "https://drive.google.com/file/d/1Oxi15YUcd5qIfdSn93luGoZPBqHWbgBA/view?usp=sharing";
+
+// Shared actions
+const ACT_EXP:     ChatAction = { label: "View experience →",  href: "#experience" };
+const ACT_PROJ:    ChatAction = { label: "Explore projects →",  href: "#projects"   };
+const ACT_RESUME:  ChatAction = { label: "View résumé →",       href: RESUME_URL    };
+const ACT_CONTACT: ChatAction = { label: "Contact Khanh →",     href: "#contact"    };
+
+// ── Knowledge base ─────────────────────────────────────────────────────────
+const chatQA: ChatQAItem[] = [
   {
-    id: "profile",
-    category: "About",
-    title: "Khanh Truong — Overview",
-    summary:
-      "Khanh Truong is a Computer Science and Mathematics student at DePauw University (GPA 3.82, graduating May 2028) who builds across full-stack web, AI, mobile, and computer vision 🇻🇳\n\nHe interned at IpserLab (React Native + Claude API, 2026) and LECO Studio (ASL Chrome extension, 2025), conducts computer vision research at DePauw on Raspberry Pi, and leads Google Developer Groups on Campus. He's actively seeking software engineering internships.",
-    details: [
-      "B.A. Computer Science & Mathematics at DePauw University — GPA 3.82",
-      "Interned at IpserLab (2026) and LECO Studio (2025)",
-      "Research Assistant using C++/OpenCV on Raspberry Pi (Jan 2025–Present)",
-      "President of Google Developer Groups on Campus at DePauw",
-    ],
-    aliases: ["khanh", "khanh truong", "truong"],
+    id: "intro",
+    question: "Give me a quick introduction",
+    answer:
+      "Khanh is a Computer Science and Mathematics student at DePauw University who builds full-stack, mobile, computer vision, and AI-powered applications. His experience includes software engineering internships, academic research, teaching, and developer-community leadership.",
     keywords: [
-      "who", "about", "intro", "background", "profile", "overview", "summary",
-      "story", "journey", "grew up", "vietnam", "person", "yourself", "himself",
-      "tell", "describe",
+      "about", "introduction", "introduce", "background", "overview",
+      "summary", "profile", "story", "himself",
     ],
-    suggestions: [
-      "What's his best project?",
-      "Tell me about his experience",
-      "What is he looking for?",
+    aliases: [
+      "give me a quick introduction",
+      "tell me about yourself",
+      "tell me about khanh",
+      "who is khanh",
+      "introduce yourself",
+    ],
+    followUps: [
+      "What has Khanh built?",
+      "What is he working on now?",
+      "Does he have leadership experience?",
     ],
   },
   {
-    id: "education",
-    category: "Education",
-    title: "DePauw University — B.A. Computer Science & Mathematics",
-    summary:
-      "🎓 DePauw University — Greencastle, Indiana\nB.A. Computer Science & Mathematics\nGPA: 3.82 | Graduating May 2028\n\nCoursework: Data Structures (C++), AI, Software Design (OOP), Linear Algebra, Computer Security, Mobile Development, Computer Systems\n\nActivities: President of Google Developer Groups on Campus, IT Associates Program, CodeMely",
-    details: [
-      "Major: Computer Science and Mathematics",
-      "GPA: 3.82 — Expected graduation: May 2028",
-      "Coursework: Data Structures (C++), AI, Software Design (OOP), Linear Algebra, Computer Security, Mobile Development, Computer Systems",
-      "Affiliations: Google Developer Groups on Campus, IT Associates Program, CodeMely",
-    ],
-    aliases: ["depauw", "dpu", "dpu university"],
+    id: "experience",
+    question: "Show me Khanh's experience",
+    answer:
+      "Khanh has worked as a software engineering intern at IpserLab and LECO Studio, a research assistant at DePauw University, and a computer science teaching assistant. His work spans mobile development, backend engineering, AI inference, computer vision, browser extensions, and technical mentoring.",
     keywords: [
-      "education", "school", "university", "college", "degree", "gpa", "major",
-      "study", "grad", "graduation", "cs", "computer science", "mathematics",
-      "math", "coursework", "courses", "class", "affiliations", "clubs",
-      "indiana", "greencastle",
+      "experience", "work", "internship", "employment", "career",
+      "professional", "history", "jobs", "positions", "roles",
     ],
-    suggestions: [
-      "Tell me about his experience",
-      "What is he looking for?",
-      "How can I contact him?",
+    aliases: [
+      "show me experience",
+      "what is your experience",
+      "what is his experience",
+      "work experience",
+      "employment history",
+      "professional background",
     ],
-  },
-  {
-    id: "experience_ipserlab",
-    category: "Experience",
-    title: "Software Engineer Intern — IpserLab, LLC",
-    summary:
-      "At IpserLab (May–August 2026, Remote), Khanh built a React Native and FastAPI mobile app that scans grocery receipts, tracks household food inventory, and recommends meals using the Claude API.\n\n📊 8 REST endpoints · <1s sync · ~30% → <2% AI truncation · 12 error screens",
-    details: [
-      "Built the mobile app in React Native (TypeScript) and FastAPI (Python)",
-      "Connected through 8 REST API endpoints with synchronization under 1 second",
-      "Added 12 error screens ensuring clear messages instead of crashes",
-      "Reduced AI recipe truncation from ~30% to <2% by tuning Claude API settings (max_tokens, prompt structure)",
-      "Migrated from SQLite to PostgreSQL for production scalability",
-    ],
-    technologies: ["React Native", "TypeScript", "FastAPI", "Python", "Claude API", "PostgreSQL"],
-    metrics: ["8 REST API endpoints", "<1 second sync", "12 error screens", "~30% → <2% AI truncation"],
-    aliases: ["ipserlab", "ipser lab", "ipser"],
-    keywords: [
-      "ipserlab", "ipser", "grocery", "receipt", "meal", "food",
-      "react native", "claude", "claude api", "2026", "intern",
-    ],
-    suggestions: [
-      "Tell me about LECO Studio",
-      "Tell me about his research",
-      "What's his best project?",
-    ],
-  },
-  {
-    id: "experience_research",
-    category: "Experience",
-    title: "Research Assistant — Tangible Learning Platform, DePauw University",
-    summary:
-      "Since January 2025, Khanh has been a research assistant at DePauw University building a C++ computer vision system that lets children program by physically arranging coding cards.\n\n📊 35% latency reduction · Sub-100ms detection · 40-participant study",
-    details: [
-      "Built the system in C++ using OpenCV (ArUco), Raylib, and FluidSynth on Raspberry Pi 4",
-      "Implemented ArUco marker detection and PnP pose estimation to translate card sequences into executable command graphs",
-      "Reduced marker detection latency by 35% to sub-100ms end-to-end",
-      "Validated usability with a 40-participant study using the Wilcoxon rank-sum test",
-    ],
-    technologies: ["C++", "OpenCV", "ArUco", "Raylib", "FluidSynth", "Raspberry Pi 4"],
-    metrics: ["35% latency reduction", "Sub-100ms detection", "40-participant study"],
-    aliases: ["tangible learning", "tangible programming", "research assistant", "depauw research"],
-    keywords: [
-      "research", "tangible", "coding cards", "computer vision", "raspberry pi",
-      "opencv", "aruco", "cpp", "children", "kids", "programming", "latency",
-      "study", "cv", "embedded",
-    ],
-    suggestions: [
-      "Tell me about LECO Studio",
+    followUps: [
       "Tell me about IpserLab",
-      "What's his best project?",
-    ],
-  },
-  {
-    id: "experience_leco",
-    category: "Experience",
-    title: "Software Engineering Intern — LECO Studio",
-    summary:
-      "At LECO Studio (May–August 2025, Ho Chi Minh City), Khanh built a privacy-first Chrome MV3 extension that translates American Sign Language into spoken voice in real time during Google Meet, Zoom, Teams, and Messenger — sending only 144 landmark floats per frame, no video.\n\n📊 63.18% Top-1 ASL accuracy · 5.97× faster inference · 2.57ms median",
-    details: [
-      "Sends only 144 landmark floats per frame over WebSocket to a FastAPI server — no video transmitted",
-      "Trained a bidirectional GRU (558K parameters) on WLASL: 63.18% Top-1 / 81.59% Top-3 accuracy",
-      "Exported to ONNX Runtime: 5.97× faster inference (2.57ms median) with an LFU prediction cache",
-      "Bypassed Chrome MV3's sandbox via a two-world MediaPipe bridge",
-      "Overrode getUserMedia with the Web Audio API to inject synthesized speech into the meeting's microphone",
-    ],
-    technologies: ["Python", "PyTorch", "ONNX Runtime", "JavaScript", "Chrome MV3", "MediaPipe", "FastAPI", "WebSocket"],
-    metrics: ["63.18% Top-1 accuracy", "81.59% Top-3 accuracy", "5.97× inference speedup", "2.57ms median", "144 floats/frame"],
-    aliases: ["leco", "leco studio", "asl", "sign language", "asl extension", "chrome extension"],
-    keywords: [
-      "leco", "asl", "sign language", "chrome extension", "onnx", "gru",
-      "pytorch", "wlasl", "mediapipe", "2025", "speech", "accessibility",
-      "privacy", "extension", "intern", "video call", "meet", "zoom",
-    ],
-    suggestions: [
-      "Tell me about IpserLab",
+      "Tell me about the ASL extension",
       "Tell me about his research",
-      "What's his best project?",
     ],
+    actions: [ACT_EXP],
   },
   {
-    id: "experience_ta",
-    category: "Experience",
-    title: "Teaching Assistant — DePauw University",
-    summary:
-      "From January 2025 to January 2026, Khanh was a teaching assistant at DePauw supporting 30+ students in CS 121 (Intro to Computer Science) and CS 125 (Software Design / OOP) with code reviews, debugging, and lab instruction. Worked primarily in Java.",
-    details: [
-      "Supported 30+ students across CS 121 and CS 125",
-      "Provided code reviews, debugging sessions, and tutoring hours",
-      "Conducted lab instruction working primarily in Java and OOP",
-    ],
-    technologies: ["Java", "OOP"],
-    metrics: ["30+ students supported"],
-    aliases: ["ta", "teaching assistant"],
+    id: "built",
+    question: "What has Khanh built?",
+    answer:
+      "Khanh has built a grocery inventory and meal-planning app, a privacy-preserving ASL-to-speech browser extension, and a tangible programming game for children. These products combine user-focused interfaces with backend systems, AI models, computer vision, and embedded hardware.",
     keywords: [
-      "teaching", "ta", "teaching assistant", "tutor", "cs121", "cs125",
-      "java", "oop", "instruction", "students",
+      "built", "projects", "products", "applications", "portfolio",
+      "made", "created", "developed", "apps", "work",
     ],
-    suggestions: [
-      "Tell me about his leadership",
-      "Tell me about his experience",
-      "How can I contact him?",
+    aliases: [
+      "what has khanh built",
+      "what did he make",
+      "what did he build",
+      "show me his projects",
+      "what projects",
     ],
-  },
-  {
-    id: "project_pitchbook",
-    category: "Project",
-    title: "PitchBook — Soccer Field Booking & Matchmaking",
-    summary:
-      "PitchBook is Khanh's independent full-stack soccer field booking and matchmaking platform, tested with five football-pitch owners in District 2, Ho Chi Minh City.\n\n⚠️ Note: not affiliated with PitchBook Data, the financial-data company.\n\n🔑 Features: JWT auth with role-based access, owner dashboards, public/private matchmaking lobbies, Prisma transactions preventing double-booking, real-time chat via Socket.io, bilingual UI (English/Vietnamese, 180+ translation keys).",
-    details: [
-      "JWT authentication and role-based access control for owners and players",
-      "Owner dashboards for managing field availability and scheduling",
-      "Public and private matchmaking lobbies with automatic player matching",
-      "Prisma transactions preventing double-booking under concurrent requests",
-      "Real-time chat and notifications via Socket.io",
-      "Bilingual UI with 180+ translation keys (English and Vietnamese)",
+    followUps: [
+      "Tell me about the grocery app",
+      "Tell me about the ASL extension",
+      "Tell me about the tangible programming system",
     ],
-    technologies: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Socket.io", "JWT", "i18n"],
-    aliases: ["pitchbook", "pitch book", "soccer platform", "football booking", "soccer booking"],
-    keywords: [
-      "pitchbook", "pitch", "soccer", "football", "field", "booking",
-      "matchmaking", "lobby", "socket", "prisma", "double booking",
-      "vietnamese", "sport", "i18n",
-    ],
-    suggestions: [
-      "Tell me about Agentic Shopping",
-      "Tell me about POV",
-      "What's his tech stack?",
-    ],
-  },
-  {
-    id: "project_agentic",
-    category: "Project",
-    title: "Agentic Shopping Assistant — Amazon Nova Hackathon",
-    summary:
-      "Built for the Amazon Nova Hackathon (March 2026), the Agentic Shopping Assistant uses Amazon Nova for multi-turn requirement understanding, Playwright for scraping, and aggregates reviews from Amazon, Reddit, and TikTok to rank products intelligently.\n\nFull stack: FastAPI backend, React frontend, Amazon Aurora PostgreSQL.",
-    details: [
-      "Multi-turn requirement understanding and recommendation planning with Amazon Nova",
-      "Automated product scraping across stores using Playwright",
-      "Review aggregation from Amazon, Reddit, and TikTok to score by price, delivery, and ratings",
-      "FastAPI backend, React frontend, Amazon Aurora PostgreSQL database",
-    ],
-    technologies: ["Python", "Amazon Nova", "FastAPI", "React", "Playwright", "Aurora PostgreSQL"],
-    aliases: ["agentic shopping", "shopping assistant", "nova project", "amazon hackathon", "agencart", "agentic"],
-    keywords: [
-      "agentic", "shopping", "amazon nova", "nova", "hackathon", "product",
-      "cart", "recommendation", "playwright", "scraping", "review", "amazon",
-    ],
-    suggestions: [
-      "Tell me about POV",
-      "Tell me about PitchBook",
-      "What's his tech stack?",
-    ],
-  },
-  {
-    id: "project_pov",
-    category: "Project",
-    title: "POV — AI Landmark Discovery App",
-    summary:
-      "Built for the Gemini 3 Hackathon (January 2026), POV is a mobile app that identifies landmarks from photos using Gemini Vision API, then supports multi-turn follow-up questions about nearby locations and events.\n\nBuilt with Flutter, Python, Supabase, and Google Maps/Places APIs.",
-    details: [
-      "Image recognition pipeline using Gemini Vision API + Google Maps API + Google Places API",
-      "Multi-turn conversational interface maintaining context across queries",
-      "Flutter (Dart) mobile frontend with Python backend",
-      "Supabase authentication for user sessions and exploration history",
-    ],
-    technologies: ["Flutter", "Dart", "Python", "Supabase", "Gemini API", "Google Maps API", "Google Places API"],
-    aliases: ["pov", "pov-ai", "pov ai", "landmark app", "pov app"],
-    keywords: [
-      "pov", "landmark", "vision", "gemini", "flutter", "dart", "supabase",
-      "map", "location", "mobile", "hackathon", "travel", "camera", "identify",
-    ],
-    suggestions: [
-      "Tell me about Agentic Shopping",
-      "Tell me about PitchBook",
-      "What's his tech stack?",
-    ],
-  },
-  {
-    id: "project_workflow",
-    category: "Project",
-    title: "AI Workflow Automation System",
-    summary:
-      "An AI-powered email processing pipeline that uses the Gemini API to summarize emails, extract meeting details, and route actions into Google Calendar and Drive — reducing repetitive admin work by 40%.",
-    details: [
-      "Email triage and summarization with structured meeting extraction via Gemini API",
-      "Google Calendar event creation and Google Drive file organization",
-      "Integrated Gmail API, Google Calendar API, and Google Drive API",
-      "40% reduction in administrative workload through automated scheduling",
-    ],
-    technologies: ["Python", "Gemini API", "Gmail API", "Google Calendar API", "Google Drive API"],
-    metrics: ["40% admin workload reduction"],
-    aliases: ["workflow automation", "email automation", "leco automation", "workflow"],
-    keywords: [
-      "workflow", "automation", "email", "gmail", "calendar", "drive",
-      "gemini", "scheduling", "triage", "productivity", "google",
-    ],
-    suggestions: [
-      "Tell me about PitchBook",
-      "Tell me about Agentic Shopping",
-      "What's his tech stack?",
-    ],
-  },
-  {
-    id: "best_project",
-    category: "Project",
-    title: "Best / Favourite Project",
-    summary:
-      "Khanh's most technically challenging work is the LECO Studio ASL Chrome extension 🏆\n\nIt required training a bidirectional GRU from scratch (558K parameters, 63.18% Top-1 accuracy), exporting to ONNX for 5.97× speedup, and creatively bypassing Chrome MV3's sandbox restrictions with a two-world MediaPipe bridge. Building something that genuinely increases accessibility for the Deaf and hard-of-hearing community made it especially meaningful.\n\nFor hackathon impact, the Agentic Shopping Assistant (Amazon Nova) is a close second — built fast, deployed full-stack, and addresses a real multi-constraint shopping problem.",
-    details: [],
-    aliases: ["best project", "favorite project", "most proud", "showcase"],
-    keywords: [
-      "best", "favorite", "favourite", "top", "most proud", "showcase",
-      "impressive", "strongest", "highlight", "coolest",
-    ],
-    suggestions: [
-      "Tell me about LECO Studio",
-      "Tell me about Agentic Shopping",
-      "What's his tech stack?",
-    ],
+    actions: [ACT_PROJ],
   },
   {
     id: "skills",
-    category: "Skills",
-    title: "Technical Skills",
-    summary:
-      "Khanh's technical skills span full-stack development, AI/ML, computer vision, and mobile:\n\n⚡ Languages: Java, Python, C/C++, SQL, JavaScript, TypeScript, Dart, R, Lua/Luau, HTML/CSS\n🖥 Frontend & Mobile: React.js, React Native, Next.js, Flutter, TailwindCSS\n⚙️ Backend: FastAPI, Node.js, REST APIs, WebSocket\n🗄 Databases & Cloud: PostgreSQL, Amazon Aurora, Supabase, Firebase, MongoDB\n🤖 AI/ML & APIs: Amazon Nova, Claude API, Gemini API, PyTorch, ONNX Runtime\n📷 Computer Vision: OpenCV, ArUco, MediaPipe\n🔧 Tools: Git, Docker, Playwright, Raspberry Pi, Tableau, Roblox Studio",
-    details: [],
-    aliases: ["tech stack", "technologies", "stack", "languages", "frameworks"],
+    question: "What are his strongest skills?",
+    answer:
+      "Khanh works primarily with Python, TypeScript, JavaScript, Java, C++, Dart, and SQL. His main frameworks include React, React Native, FastAPI, and Flutter. On the data/cloud side he uses PostgreSQL, Amazon Aurora, Supabase, Firebase, and MongoDB. Tooling includes Docker, OpenCV, MediaPipe, PyTorch, ONNX Runtime, Playwright, Raspberry Pi, and generative AI APIs (Claude, Amazon Nova, Gemini).",
     keywords: [
-      "skill", "stack", "language", "framework", "tech", "tool", "know",
-      "proficient", "strong", "best at", "experience with", "technology",
-      "what do you use", "expertise", "python", "javascript", "java",
-      "react", "node", "next",
+      "skills", "technical", "technologies", "tech", "stack", "languages",
+      "frameworks", "strongest", "tools", "expertise", "proficient",
+      "python", "typescript", "javascript", "java", "dart", "sql", "cpp",
+      "react", "fastapi", "flutter", "docker", "supabase", "firebase",
+      "aurora", "mongodb", "playwright", "pandas", "numpy",
     ],
-    suggestions: [
-      "Tell me about his projects",
-      "Tell me about his experience",
-      "What is he looking for?",
+    aliases: [
+      "what are his strongest skills",
+      "what is your tech stack",
+      "what is his tech stack",
+      "what languages does he use",
+      "what technologies does he know",
+      "what can he do",
     ],
+    followUps: [
+      "Does he have AI experience?",
+      "Does he have backend experience?",
+      "What measurable results has he achieved?",
+    ],
+  },
+  {
+    id: "why_hire",
+    question: "Why should we hire Khanh?",
+    answer:
+      "Khanh combines product thinking with strong technical execution. He has taken ideas from prototype to working product, improved measurable system performance, and demonstrated communication and collaboration through research, teaching, and leadership.",
+    keywords: [
+      "hire", "candidate", "strengths", "fit", "consider", "recommend",
+      "choose", "stand out", "good", "strong", "value",
+    ],
+    aliases: [
+      "why should we hire khanh",
+      "why hire khanh",
+      "why are you a good candidate",
+      "why should we consider him",
+      "is he a good fit",
+      "what makes him stand out",
+    ],
+    followUps: [
+      "What measurable results has he achieved?",
+      "How does he work with others?",
+      "What problems does he enjoy solving?",
+    ],
+    actions: [ACT_RESUME, ACT_CONTACT],
+  },
+  {
+    id: "ipserlab",
+    question: "Tell me about IpserLab",
+    answer:
+      "At IpserLab, Khanh built a React Native mobile app and FastAPI backend that scans grocery receipts, tracks household food inventory, and suggests meals via the Claude API. He migrated the database from SQLite to PostgreSQL, implemented 8 REST endpoints for sub-second sync, designed 12 error-state screens, and reduced truncated recipe responses from about 30% to under 2%.",
+    keywords: [
+      "ipserlab", "ipser", "grocery", "receipt", "meal", "food", "inventory",
+      "claude", "2026", "react native",
+    ],
+    aliases: [
+      "tell me about ipserlab",
+      "tell me about the grocery app",
+      "ipserlab internship",
+    ],
+    followUps: [
+      "What impact did he make there?",
+      "Tell me about the ASL extension",
+      "Tell me about his research",
+    ],
+    actions: [ACT_EXP],
+  },
+  {
+    id: "asl_ext",
+    question: "Tell me about the ASL extension",
+    answer:
+      "At LECO Studio, Khanh built a privacy-preserving Chrome MV3 extension that translates American Sign Language into spoken audio for Google Meet and Zoom. It transmits only 144 landmark values per frame over WebSocket to a FastAPI inference server. He used a two-world MediaPipe bridge to work around MV3 content-script isolation and injected synthesized speech via the Web Audio API — no user setup required.",
+    keywords: [
+      "asl", "sign language", "leco", "chrome", "extension", "accessibility",
+      "translation", "mediapipe", "pytorch", "onnx", "websocket", "2025",
+      "browser", "google meet", "zoom",
+    ],
+    aliases: [
+      "tell me about the asl extension",
+      "tell me about leco",
+      "tell me about leco studio",
+      "asl translation",
+      "sign language extension",
+    ],
+    followUps: [
+      "How accurate was the ASL model?",
+      "How did he protect user privacy?",
+      "What measurable results has he achieved?",
+    ],
+    actions: [ACT_EXP],
+  },
+  {
+    id: "asl_accuracy",
+    question: "How accurate was the ASL model?",
+    answer:
+      "Khanh trained a 558,000-parameter bidirectional GRU on the WLASL dataset, achieving 63.18% Top-1 and 81.59% Top-3 accuracy. He deployed it with ONNX Runtime and added an LFU prediction cache for repeated input windows to further reduce inference latency.",
+    keywords: [
+      "accuracy", "top-1", "top-3", "gru", "wlasl", "model",
+      "percent", "558", "bidirectional", "train", "dataset",
+    ],
+    aliases: [
+      "how accurate was the asl model",
+      "how accurate was the model",
+      "what accuracy did he achieve",
+      "asl model accuracy",
+    ],
+    followUps: [
+      "How did he protect user privacy?",
+      "Does he have AI experience?",
+      "What measurable results has he achieved?",
+    ],
+  },
+  {
+    id: "privacy",
+    question: "How did he protect user privacy?",
+    answer:
+      "The extension sent only 144 body-landmark values per frame to the inference server rather than transmitting raw camera video. This reduced the amount of sensitive visual data leaving the user's device.",
+    keywords: [
+      "privacy", "private", "video", "landmark", "data",
+      "protection", "sensitive", "camera", "preserve", "secure",
+    ],
+    aliases: [
+      "how did he protect user privacy",
+      "privacy preserving",
+      "how was privacy handled",
+      "user privacy",
+    ],
+    followUps: [
+      "How accurate was the ASL model?",
+      "Does he have AI experience?",
+      "Tell me about the ASL extension",
+    ],
+  },
+  {
+    id: "research",
+    question: "Tell me about his research",
+    answer:
+      "Khanh is developing a tangible programming system that lets children control an on-screen character by arranging physical coding cards. The system uses C++, OpenCV, ArUco markers, pose estimation, Raylib, FluidSynth, and a Raspberry Pi.",
+    keywords: [
+      "research", "tangible", "programming", "opencv", "raspberry", "aruco",
+      "cpp", "children", "kids", "coding cards", "vision", "embedded",
+      "experience", "academic",
+    ],
+    aliases: [
+      "tell me about his research",
+      "what research does he do",
+      "research assistant",
+      "tangible programming",
+      "research experience",
+    ],
+    followUps: [
+      "What impact did the research have?",
+      "What is Khanh working on now?",
+      "What measurable results has he achieved?",
+    ],
+    actions: [ACT_EXP],
+  },
+  {
+    id: "research_impact",
+    question: "What impact did the research have?",
+    answer:
+      "Khanh optimized the computer-vision pipeline to reduce marker-detection latency by 35%, bringing end-to-end performance below 100 milliseconds. The system was also evaluated through a usability study involving 40 participants.",
+    keywords: [
+      "latency", "35", "100", "milliseconds", "usability", "study",
+      "participants", "optimised", "optimized", "performance", "reduced", "marker",
+    ],
+    aliases: [
+      "what impact did the research have",
+      "research results",
+      "what did his research achieve",
+      "research impact",
+    ],
+    followUps: [
+      "Tell me about his research",
+      "What measurable results has he achieved?",
+      "Does he have AI experience?",
+    ],
+  },
+  {
+    id: "metrics",
+    question: "What measurable results has he achieved?",
+    answer:
+      "Khanh reduced truncated AI responses from about 30% to under 2%, enabled sub-second mobile-to-backend synchronization, and lowered computer-vision latency by 35% to under 100 milliseconds. He also trained an ASL model that reached 63.18% Top-1 and 81.59% Top-3 accuracy.",
+    keywords: [
+      "impact", "results", "metrics", "achievements", "performance",
+      "measurable", "numbers", "outcome", "achieved", "improved",
+    ],
+    aliases: [
+      "what measurable results has he achieved",
+      "what results has he achieved",
+      "what are his metrics",
+      "what impact has he made",
+      "what are his achievements",
+      "what results have you achieved",
+    ],
+    followUps: [
+      "Tell me about IpserLab",
+      "Tell me about the ASL extension",
+      "Tell me about his research",
+    ],
+    actions: [ACT_RESUME, ACT_CONTACT],
+  },
+  {
+    id: "ai_exp",
+    question: "Does he have AI experience?",
+    answer:
+      "Yes. Khanh has trained and deployed a bidirectional GRU for ASL recognition and integrated Claude into a production-style meal-planning application. He has also worked with ONNX Runtime, MediaPipe, computer vision, prompt design, and generative AI APIs.",
+    keywords: [
+      "ai", "artificial intelligence", "machine learning", "ml", "deep learning",
+      "claude", "onnx", "pytorch", "generative", "llm", "neural", "model",
+    ],
+    aliases: [
+      "does he have ai experience",
+      "do you know machine learning",
+      "does he know ai",
+      "ai experience",
+      "machine learning experience",
+    ],
+    followUps: [
+      "Tell me about the ASL extension",
+      "What measurable results has he achieved?",
+      "What are his strongest skills?",
+    ],
+  },
+  {
+    id: "backend_exp",
+    question: "Does he have backend experience?",
+    answer:
+      "Yes. Khanh has built FastAPI services, REST endpoints, WebSocket inference pipelines, and PostgreSQL-backed applications. His backend work includes data synchronization, database migration, error handling, AI integration, and real-time communication.",
+    keywords: [
+      "backend", "fastapi", "api", "rest", "websocket", "database",
+      "postgresql", "server", "endpoint", "infrastructure", "sql",
+    ],
+    aliases: [
+      "does he have backend experience",
+      "backend experience",
+      "server experience",
+      "api experience",
+    ],
+    followUps: [
+      "Tell me about IpserLab",
+      "Tell me about the ASL extension",
+      "What are his strongest skills?",
+    ],
+    actions: [ACT_EXP],
   },
   {
     id: "leadership",
-    category: "Leadership",
-    title: "President — Google Developer Groups on Campus, DePauw University",
-    summary:
-      "Since August 2025, Khanh leads the Google Developer Groups on Campus chapter at DePauw University as President, organizing AI, cloud, and mobile workshops reaching 300+ students.\n\nHe also participates in the IT Associates Program, supporting campus-wide IT operations for 2,000+ students and faculty.",
-    details: [
-      "Leads a 10-member executive team",
-      "Organizes AI, cloud, and mobile development workshops",
-      "Reaches 300+ students across DePauw University",
-      "Member of the IT Associates Program since September 2024",
-    ],
-    metrics: ["10-member exec team", "300+ students reached"],
-    aliases: ["gdg", "gdsc", "google developer groups", "google developer student clubs"],
+    question: "Does he have leadership experience?",
+    answer:
+      "Yes. Khanh leads a 10-member executive team as president of DePauw's Google Developer Groups on Campus. He has helped organize workshops in AI, cloud computing, and mobile development that have reached more than 300 cumulative attendees.",
     keywords: [
-      "gdg", "gdsc", "google developer", "president", "leadership", "workshop",
-      "community", "club", "campus", "organize", "event", "it associates",
+      "leadership", "president", "gdg", "google developer", "team",
+      "community", "organize", "event", "workshop", "lead", "manage",
     ],
-    suggestions: [
-      "Tell me about his experience",
-      "What is he looking for?",
-      "How can I contact him?",
+    aliases: [
+      "does he have leadership experience",
+      "leadership experience",
+      "gdg president",
+    ],
+    followUps: [
+      "Does he have teaching experience?",
+      "How does he work with others?",
+      "Why should we hire Khanh?",
     ],
   },
   {
-    id: "certification",
-    category: "Certifications",
-    title: "Google IT Support Professional Certificate",
-    summary:
-      "Khanh completed the Google IT Support Professional Certificate through Coursera on September 22, 2024.\n\nThe certificate covers five courses:\n· Technical Support Fundamentals\n· The Bits and Bytes of Computer Networking\n· Operating Systems and You: Becoming a Power User\n· System Administration and IT Infrastructure Services\n· IT Security: Defense Against the Digital Dark Arts\n\n🔗 Verify: coursera.org/verify/professional-cert/8H2YTFIBIF6P",
-    details: [],
-    aliases: ["google it support", "it support cert", "coursera cert", "google cert", "it certificate"],
+    id: "teaching",
+    question: "Does he have teaching experience?",
+    answer:
+      "Yes. As a computer science teaching assistant, Khanh supported more than 60 students through Java code reviews, debugging sessions, tutoring, and lab instruction. He worked with students in introductory programming and object-oriented software design.",
     keywords: [
-      "certificate", "certification", "google", "it support", "coursera",
-      "networking", "security", "support", "it cert", "credential",
+      "teaching", "ta", "teaching assistant", "mentor", "tutor", "student",
+      "java", "oop", "instruction", "lab", "code review",
     ],
-    suggestions: [
-      "Tell me about his education",
-      "What's his tech stack?",
-      "How can I contact him?",
+    aliases: [
+      "does he have teaching experience",
+      "teaching experience",
+      "teaching assistant",
+    ],
+    followUps: [
+      "How does he work with others?",
+      "Does he have leadership experience?",
+      "What are his strongest skills?",
+    ],
+    actions: [ACT_EXP],
+  },
+  {
+    id: "teamwork",
+    question: "How does he work with others?",
+    answer:
+      "Khanh has collaborated in internship, research, teaching, and student-leadership environments. His experience supporting students and leading a developer organization shows that he can explain technical ideas clearly, receive feedback, and contribute across different teams.",
+    keywords: [
+      "teamwork", "collaboration", "collaborate", "communication", "team",
+      "soft skills", "others", "people", "interpersonal", "together",
+    ],
+    aliases: [
+      "how does he work with others",
+      "is he a team player",
+      "collaboration experience",
+      "soft skills",
+      "communication skills",
+    ],
+    followUps: [
+      "Does he have leadership experience?",
+      "Does he have teaching experience?",
+      "Why should we hire Khanh?",
+    ],
+  },
+  {
+    id: "current_work",
+    question: "What is Khanh working on now?",
+    answer:
+      "Khanh is continuing his tangible programming research at DePauw University. His current work focuses on computer vision, physical interaction, embedded hardware, and making programming more accessible to children.",
+    keywords: [
+      "current", "currently", "now", "working", "present", "latest",
+      "recent", "today", "ongoing",
+    ],
+    aliases: [
+      "what is khanh working on now",
+      "what is he working on",
+      "what is he doing now",
+      "current projects",
+    ],
+    followUps: [
+      "Tell me about his research",
+      "What impact did the research have?",
+      "What problems does he enjoy solving?",
+    ],
+  },
+  {
+    id: "problems",
+    question: "What problems does he enjoy solving?",
+    answer:
+      "Khanh enjoys building practical software that connects technical systems with real human needs. His work has addressed accessibility, education, food management, real-time communication, and human-computer interaction.",
+    keywords: [
+      "interests", "problems", "passion", "focus", "enjoy", "motivated",
+      "interested", "care", "like", "love", "curious",
+    ],
+    aliases: [
+      "what problems does he enjoy solving",
+      "what are his interests",
+      "what is he passionate about",
+    ],
+    followUps: [
+      "What has Khanh built?",
+      "Does he have AI experience?",
+      "Why should we hire Khanh?",
     ],
   },
   {
     id: "contact",
-    category: "Contact",
-    title: "Contact Khanh",
-    summary:
-      "You can reach Khanh at:\n\n📧 truongnguyent.khanh@gmail.com\n💼 linkedin.com/in/heyamktr\n🐙 github.com/heyamktr\n\nMost responsive on email. Open to conversations about internships, collaborations, or anything interesting! 👋",
-    details: [
-      "Email: truongnguyent.khanh@gmail.com",
-      "LinkedIn: linkedin.com/in/heyamktr",
-      "GitHub: github.com/heyamktr",
-    ],
-    aliases: ["contact info", "email address", "reach out"],
+    question: "How can I contact Khanh?",
+    answer:
+      "You can reach Khanh at truongnguyent.khanh@gmail.com, on LinkedIn at linkedin.com/in/heyamktr, or on GitHub at github.com/heyamktr. He's most responsive by email and open to internship and collaboration conversations.",
     keywords: [
-      "contact", "email", "reach", "linkedin", "github", "get in touch",
-      "connect", "message", "talk", "meet", "hire",
+      "contact", "email", "reach", "linkedin", "github",
+      "get in touch", "connect", "message", "talk",
     ],
-    suggestions: [
+    aliases: [
+      "how can i contact khanh",
+      "contact info",
+      "email address",
+      "how to reach him",
+    ],
+    followUps: [
       "What is he looking for?",
       "Where is his resume?",
-      "Tell me about his projects",
+      "What has Khanh built?",
     ],
-  },
-  {
-    id: "looking_for",
-    category: "Opportunities",
-    title: "Open to Software Engineering Internships",
-    summary:
-      "Khanh is actively seeking software engineering internships, particularly in full-stack, AI/ML, or systems roles at companies that care about engineering quality and real-world impact.\n\n📅 Currently interning at IpserLab (May–Aug 2026)\n📅 Available for new roles from September 2026\n🎓 New grad full-time roles from May 2028\n\nOpen to remote, hybrid, or in-person. 📍",
-    details: [
-      "Currently interning at IpserLab (May–Aug 2026)",
-      "Available for new roles from September 2026",
-      "New grad full-time roles from May 2028",
-      "Open to remote, hybrid, or in-person",
-    ],
-    aliases: ["job search", "internship search", "open to work"],
-    keywords: [
-      "looking", "seeking", "internship", "job", "role", "hire", "recruit",
-      "opportunity", "position", "open to", "available", "timeline", "when",
-      "start", "availability", "new grad", "full-time", "work",
-    ],
-    suggestions: [
-      "How can I contact him?",
-      "Where is his resume?",
-      "Tell me about his experience",
-    ],
+    actions: [ACT_CONTACT],
   },
   {
     id: "resume",
-    category: "Resume",
-    title: "Khanh's Resume",
-    summary:
-      "You can download Khanh's resume using the Resume button in the navigation bar at the top of this page 📄\n\nOr keep asking — I'm basically a talking resume! 😄",
-    details: [],
-    aliases: ["cv", "download resume", "pdf"],
-    keywords: ["resume", "cv", "download", "pdf", "curriculum vitae"],
-    suggestions: [
-      "How can I contact him?",
-      "What is he looking for?",
-      "What's his best project?",
+    question: "Where is his resume?",
+    answer:
+      "You can view Khanh's résumé using the Resume button in the navigation bar, or directly via the link below.",
+    keywords: ["resume", "cv", "download", "pdf", "résumé", "curriculum"],
+    aliases: [
+      "where is his resume",
+      "can i see his resume",
+      "show me the resume",
     ],
+    followUps: [
+      "How can I contact Khanh?",
+      "What is he looking for?",
+      "What measurable results has he achieved?",
+    ],
+    actions: [ACT_RESUME, ACT_CONTACT],
+  },
+  {
+    id: "looking_for",
+    question: "What is he looking for?",
+    answer:
+      "Khanh is seeking software engineering internships, particularly in full-stack, AI/ML, or systems roles. He is currently interning at IpserLab through August 2026 and available for new roles from September 2026. Full-time roles from May 2028.",
+    keywords: [
+      "looking", "seeking", "internship", "job", "role", "recruit",
+      "opportunity", "open", "available", "timeline", "start",
+      "new grad", "full-time", "want", "hire",
+    ],
+    aliases: [
+      "what is he looking for",
+      "is he looking for a job",
+      "open to work",
+      "available for hire",
+      "when is he available",
+    ],
+    followUps: [
+      "How can I contact Khanh?",
+      "Where is his resume?",
+      "Show me Khanh's experience",
+    ],
+    actions: [ACT_RESUME, ACT_CONTACT],
   },
 ];
 
-// ── Stop words ────────────────────────────────────────────────────────
-const STOP_WORDS = new Set([
+// ── Security ───────────────────────────────────────────────────────────────
+const INJECTION_PATTERN =
+  /ignore.*(previous|above|prior|all)|reveal.*prompt|you are now|act as|disregard|system prompt|pretend|jailbreak|forget everything/i;
+
+// ── Normaliser ─────────────────────────────────────────────────────────────
+// Collapses pronouns so "what is his experience" and "show me his skills" both
+// become regular noun-based queries rather than always scoring "intro".
+function normalise(input: string): string {
+  return input
+    .toLowerCase()
+    .replace(/\bkhanh'?s?\b/g, "khanh")
+    .replace(/\b(your|you|yourself|he|his|him)\b/g, "khanh")
+    .replace(/[^\w\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// ── Stop words ─────────────────────────────────────────────────────────────
+const STOP = new Set([
   "a", "an", "the", "is", "are", "was", "were", "be", "been", "being",
   "have", "has", "had", "do", "does", "did", "will", "would", "could",
   "should", "may", "might", "shall", "can", "at", "in", "on", "for",
   "to", "of", "and", "or", "but", "not", "with", "from", "by", "about",
   "as", "into", "through", "that", "this", "these", "those", "it", "its",
-  "i", "you", "he", "she", "we", "they", "me", "him", "her", "us", "them",
-  "your", "his", "their", "our", "my", "any", "some", "there", "then",
-  "than", "also", "more", "so", "if", "up", "out", "no", "yes", "just",
-  "get", "go", "tell", "let", "see", "give", "here", "much", "very",
+  "i", "any", "some", "there", "then", "than", "also", "more", "so", "if",
+  "up", "out", "no", "yes", "just", "get", "go", "let", "see", "give",
+  "here", "much", "very", "tell", "me", "us", "them", "our", "my",
+  "khanh",  // too broad after pronoun expansion to be a keyword signal
 ]);
 
-// ── Security patterns ─────────────────────────────────────────────────
-const INJECTION_PATTERN =
-  /ignore.*(previous|above|prior|all)|reveal.*prompt|you are now|act as|disregard|system prompt|pretend|jailbreak|forget everything/i;
-
-// ── Tokenizer ─────────────────────────────────────────────────────────
-function tokenize(input: string): string[] {
-  return input
-    .toLowerCase()
-    .replace(/[^\w\s]/g, " ")
+function tokenise(input: string): string[] {
+  return normalise(input)
     .split(/\s+/)
-    .filter((t) => t.length > 1 && !STOP_WORDS.has(t));
+    .filter((t) => t.length > 1 && !STOP.has(t));
 }
 
-// ── Scorer ────────────────────────────────────────────────────────────
-function scoreItem(item: KnowledgeItem, tokens: string[]): number {
-  const aliases = (item.aliases ?? []).map((a) => a.toLowerCase());
-  const keywords = (item.keywords ?? []).map((k) => k.toLowerCase());
-  const idWords = item.id.toLowerCase().split("_");
-  const titleWords = item.title.toLowerCase().split(/\W+/);
+// ── Scorer ─────────────────────────────────────────────────────────────────
+function scoreItem(
+  item: ChatQAItem,
+  normalisedInput: string,
+  tokens: string[]
+): number {
+  // Exact canonical question match
+  if (normalise(item.question) === normalisedInput) return 1000;
 
+  // Alias match
+  if ((item.aliases ?? []).some((a) => normalise(a) === normalisedInput))
+    return 500;
+
+  // Keyword scoring — partial substring matching so "ml" matches "machine learning"
   let score = 0;
   for (const token of tokens) {
-    if (aliases.some((a) => a === token || a.includes(token) || token.includes(a))) {
-      score += 5;
-    } else if (titleWords.some((w) => w === token && w.length > 2)) {
-      score += 3;
-    } else if (keywords.some((k) => k === token || k.includes(token))) {
+    if (
+      item.keywords.some(
+        (k) => k === token || k.includes(token) || token.includes(k)
+      )
+    ) {
       score += 2;
-    } else if (idWords.some((w) => w === token)) {
-      score += 1;
     }
   }
   return score;
 }
 
-// ── Main export ───────────────────────────────────────────────────────
+// ── Main export ────────────────────────────────────────────────────────────
 export function getResponse(input: string): BotResponse {
   const trimmed = input.trim();
 
   if (!trimmed) {
-    return {
-      answer:
-        "I didn't catch that! Ask me about Khanh's projects, skills, experience, or background.",
-      suggestions: INITIAL_SUGGESTIONS,
-    };
+    return { answer: FALLBACK_ANSWER, suggestions: FALLBACK_SUGGESTIONS };
   }
 
   if (INJECTION_PATTERN.test(trimmed)) {
     return {
       answer:
-        "I'm focused on answering questions about Khanh's background, projects, and skills. How can I help? 😊",
+        "I'm focused on questions about Khanh's background, projects, and skills. How can I help? 😊",
       suggestions: INITIAL_SUGGESTIONS,
     };
   }
 
-  const tokens = tokenize(trimmed);
+  const normalisedInput = normalise(trimmed);
+  const tokens = tokenise(trimmed);
+
   if (tokens.length === 0) {
-    return {
-      answer:
-        "Hmm, I'm not sure how to parse that! Try asking about Khanh's projects, skills, or experience. 🤔",
-      suggestions: INITIAL_SUGGESTIONS,
-    };
+    return { answer: FALLBACK_ANSWER, suggestions: FALLBACK_SUGGESTIONS };
   }
 
   let bestScore = 0;
-  let bestItem: KnowledgeItem | null = null;
+  let bestItem: ChatQAItem | null = null;
 
-  for (const item of knowledgeBase) {
-    const s = scoreItem(item, tokens);
+  for (const item of chatQA) {
+    const s = scoreItem(item, normalisedInput, tokens);
     if (s > bestScore) {
       bestScore = s;
       bestItem = item;
@@ -514,15 +638,12 @@ export function getResponse(input: string): BotResponse {
   }
 
   if (bestScore < 2 || !bestItem) {
-    return {
-      answer:
-        "Hmm, I'm not sure about that one! 🤔 Try asking about Khanh's journey, projects, skills, experience, or how to contact him.",
-      suggestions: INITIAL_SUGGESTIONS,
-    };
+    return { answer: FALLBACK_ANSWER, suggestions: FALLBACK_SUGGESTIONS };
   }
 
   return {
-    answer: bestItem.summary,
-    suggestions: bestItem.suggestions ?? INITIAL_SUGGESTIONS,
+    answer: bestItem.answer,
+    suggestions: bestItem.followUps.slice(0, 3),
+    actions: bestItem.actions,
   };
 }

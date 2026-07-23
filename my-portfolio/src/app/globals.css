@@ -283,180 +283,180 @@ body {
   .sticky-nav-hamburger { display: flex !important; }
 }
 
-/* ── Project sticky cards ─────────────────────── */
+/* ── Projects section header ────────────────────────────────────── */
+.proj-section-header {
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 4vw, 4rem);
+}
+.proj-section-title {
+  font-size: clamp(2rem, 5vw, 72px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: #0c0c0c;
+  margin: 0;
+}
+.proj-section-count {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: clamp(0.62rem, 0.88vw, 0.76rem);
+  font-weight: 700;
+  color: #0c0c0c;
+  opacity: 0.28;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ── Featured project cards ─────────────────────────────────────── */
 .proj-card {
-  position: sticky;
-  border: 1px solid rgba(12, 12, 12, 0.12);
+  display: grid;
+  grid-template-columns: 1fr;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(215, 226, 234, 0.07);
   background: #0c0c0c;
-  border-radius: 40px;
-  padding: 1rem;
-  transform-origin: center top;
-  will-change: transform;
+  margin-bottom: clamp(1.25rem, 2vw, 1.75rem);
+  transition: border-color 0.3s ease;
 }
-@media (min-width: 640px) {
-  .proj-card {
-    border-radius: 50px;
-    padding: 1.5rem;
-  }
-}
+.proj-card:hover { border-color: rgba(215, 226, 234, 0.18); }
+
 @media (min-width: 768px) {
   .proj-card {
-    border-radius: 60px;
-    padding: 2rem;
+    grid-template-columns: 60fr 40fr;
+    min-height: clamp(460px, 58vh, 660px);
+    border-radius: 28px;
+    margin-bottom: clamp(1.5rem, 2.2vw, 2rem);
+  }
+  /* Alternating: even-index cards flip image to right */
+  .proj-card--flip { grid-template-columns: 40fr 60fr; }
+  .proj-card--flip .proj-img-zone { order: 2; }
+  .proj-card--flip .proj-info-zone { order: 1; }
+  .proj-card--flip .proj-img-fade {
+    background: linear-gradient(to left, transparent 38%, #0c0c0c 100%);
   }
 }
 
-.proj-img {
-  object-fit: cover;
-  display: block;
-  border-radius: 24px;
+/* ── Image zone ─────────────────────────────────────────────────── */
+.proj-img-zone {
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  background: #111;
 }
-@media (min-width: 640px) {
-  .proj-img {
-    border-radius: 30px;
-  }
+.proj-img-zone img { transition: transform 0.65s ease; }
+.proj-card:hover .proj-img-zone img { transform: scale(1.04); }
+
+/* Gradient dissolve: bottom on mobile, side-facing info on desktop */
+.proj-img-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 48%, #0c0c0c 100%);
+  pointer-events: none;
 }
 @media (min-width: 768px) {
-  .proj-img {
-    border-radius: 40px;
+  .proj-img-fade {
+    background: linear-gradient(to right, transparent 38%, #0c0c0c 100%);
   }
 }
 
-/* ── Project card v2 layout ───────────────────────── */
-
-/* Header row: number · title block · buttons */
-.proj-card-header {
+/* ── Info zone ──────────────────────────────────────────────────── */
+.proj-info-zone {
+  position: relative;
   display: flex;
-  align-items: flex-start;
-  gap: clamp(0.75rem, 1.5vw, 1.25rem);
-  margin-bottom: clamp(0.875rem, 1.6vw, 1.35rem);
-  flex-wrap: wrap;
+  align-items: stretch;
+  padding: clamp(1.75rem, 2.8vw, 2.5rem);
+  overflow: hidden;
 }
 
-/* Large number — reduced to a label, not a hero */
-.proj-num {
+/* Giant watermark number — design element */
+.proj-watermark {
+  position: absolute;
+  bottom: -0.1em;
+  right: -0.04em;
+  font-size: clamp(7rem, 13vw, 10rem);
   font-weight: 900;
   color: #d7e2ea;
+  opacity: 0.04;
   line-height: 1;
-  font-size: clamp(1.5rem, 3.2vw, 2.75rem);
-  flex-shrink: 0;
-  opacity: 0.28;
-  letter-spacing: -0.02em;
-  padding-top: 0.1em;
+  letter-spacing: -0.05em;
+  pointer-events: none;
+  user-select: none;
 }
 
-/* Title block */
-.proj-title-block {
-  flex: 1;
-  min-width: 0;
-}
-.proj-category {
-  font-size: clamp(0.58rem, 0.85vw, 0.68rem);
-  color: #d7e2ea;
-  opacity: 0.38;
-  letter-spacing: 0.16em;
-  margin-bottom: 0.2rem;
-  font-weight: 500;
-}
-.proj-title {
-  font-size: clamp(1.1rem, 2.2vw, 1.85rem);
-  color: #d7e2ea;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  line-height: 1.1;
-  margin: 0 0 0.35rem;
-}
-.proj-desc {
-  font-size: clamp(0.78rem, 1.05vw, 0.9rem);
-  color: #d7e2ea;
-  opacity: 0.55;
-  line-height: 1.6;
-  margin: 0 0 0.65rem;
-  font-weight: 300;
-  max-width: 56ch;
-}
-.proj-tags {
+/* Flex column fills height */
+.proj-info-inner {
   display: flex;
-  gap: 0.35rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
 }
 
-/* Action buttons */
+/* Meta label: 01 · CATEGORY */
+.proj-category {
+  font-size: clamp(0.54rem, 0.78vw, 0.63rem);
+  color: #d7e2ea;
+  opacity: 0.32;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  margin: 0 0 0.45rem;
+  text-transform: uppercase;
+}
+.proj-num-inline { font-weight: 700; opacity: 0.9; }
+
+/* Project title */
+.proj-title {
+  font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+  color: #d7e2ea;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0 0 0.85rem;
+}
+
+.proj-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+
+/* Divider */
+.proj-meta-divider {
+  height: 1px;
+  background: rgba(215, 226, 234, 0.08);
+  margin: clamp(0.875rem, 1.4vw, 1.25rem) 0;
+}
+
+/* Bullets */
+.proj-bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+/* Actions */
 .proj-actions {
   display: flex;
   gap: 0.5rem;
-  flex-shrink: 0;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
+  margin-top: clamp(1rem, 1.5vw, 1.5rem);
+  padding-top: clamp(0.75rem, 1.1vw, 1rem);
+  border-top: 1px solid rgba(215, 226, 234, 0.08);
 }
-
-/* Compact button size inside card header — overrides btn-outline responsive padding */
 .proj-actions .btn-outline {
   padding: 0.45rem 1.1rem !important;
   font-size: clamp(0.62rem, 0.88vw, 0.78rem) !important;
+  text-decoration: none;
 }
-
-/* Primary button override — white fill on dark card */
 .proj-btn-primary {
   background: #ffffff !important;
   color: #0c0c0c !important;
   border-color: #ffffff !important;
 }
-.proj-btn-primary:hover {
-  background: rgba(255, 255, 255, 0.88) !important;
-}
+.proj-btn-primary:hover { background: rgba(255,255,255,0.88) !important; }
 
-/* Body: 40 / 60 two-column grid — content drives height */
-.proj-body {
-  display: grid;
-  grid-template-columns: 40fr 60fr;
-  gap: clamp(0.625rem, 1vw, 0.875rem);
-}
-
-/* Left info panel — no overflow clipping, content-height driven */
-.proj-info-panel {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: clamp(0.875rem, 1.4vw, 1.2rem);
-  padding: clamp(1rem, 1.6vw, 1.35rem);
-  background: rgba(215, 226, 234, 0.04);
-  border-radius: 20px;
-  border: 1px solid rgba(215, 226, 234, 0.07);
-}
-@media (min-width: 640px) {
-  .proj-info-panel { border-radius: 24px; }
-}
-@media (min-width: 768px) {
-  .proj-info-panel { border-radius: 28px; }
-}
-
-/* Right image panel — min-height ensures image is always visible */
-.proj-image-wrap {
-  position: relative;
-  overflow: hidden;
-  border-radius: 20px;
-  border: 1px solid rgba(215, 226, 234, 0.1);
-  background: rgba(215, 226, 234, 0.04);
-  min-height: 320px;
-}
-@media (min-width: 640px) {
-  .proj-image-wrap { border-radius: 24px; }
-}
-@media (min-width: 768px) {
-  .proj-image-wrap { border-radius: 28px; }
-}
-
-/* Image hover scale */
-.proj-image-wrap img {
-  transition: transform 0.4s ease;
-}
-.proj-image-wrap:hover img {
-  transform: scale(1.03);
-}
-
-/* Screenshot carousel dots */
+/* Carousel dots */
 .proj-img-dots {
   position: absolute;
   bottom: 0.875rem;
@@ -467,50 +467,251 @@ body {
   z-index: 2;
 }
 .proj-img-dot {
-  width: 6px;
-  height: 6px;
+  width: 6px; height: 6px;
   border-radius: 9999px;
-  background: rgba(215, 226, 234, 0.32);
-  border: none;
-  cursor: pointer;
-  padding: 0;
+  background: rgba(215,226,234,0.32);
+  border: none; cursor: pointer; padding: 0;
   transition: background 0.2s;
 }
-.proj-img-dot.active,
-.proj-img-dot:hover {
-  background: #d7e2ea;
-}
-.proj-img-dot:focus-visible {
-  outline: 2px solid #d7e2ea;
-  outline-offset: 2px;
-}
+.proj-img-dot.active, .proj-img-dot:hover { background: #d7e2ea; }
+.proj-img-dot:focus-visible { outline: 2px solid #d7e2ea; outline-offset: 2px; }
 
-/* Tablet: keep two columns */
-@media (min-width: 641px) and (max-width: 900px) {
-  .proj-body { grid-template-columns: 42fr 58fr; }
-}
-
-/* Mobile: stack — image first, then info */
-@media (max-width: 640px) {
-  .proj-body {
-    display: flex;
-    flex-direction: column;
-    min-height: auto;
-    gap: 0.75rem;
-  }
-  .proj-image-wrap {
-    order: -1;
-    min-height: 220px;
-    max-height: 300px;
-  }
-  .proj-actions {
-    width: 100%;
-  }
-}
-
-/* Respect reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .proj-image-wrap img { transition: none !important; }
-  .proj-image-wrap:hover img { transform: none !important; }
+  .proj-img-zone img { transition: none !important; }
+  .proj-card:hover .proj-img-zone img { transform: none !important; }
   .proj-img-dot { transition: none; }
+}
+
+/* ── More projects grid ────────────────────────────── */
+.more-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+}
+@media (min-width: 640px) {
+  .more-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.more-card {
+  background: #0c0c0c;
+  border: 1px solid rgba(215, 226, 234, 0.08);
+  border-radius: 20px;
+  padding: clamp(1.5rem, 2.2vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+/* Teal top accent line */
+.more-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,168,182,0.55), transparent);
+}
+.more-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(215, 226, 234, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.more-card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex: 1;
+  padding-top: 0.25rem;
+}
+
+.more-card-num {
+  font-size: clamp(0.58rem, 0.8vw, 0.68rem);
+  font-weight: 700;
+  color: #d7e2ea;
+  opacity: 0.25;
+  letter-spacing: 0.12em;
+}
+
+.more-card-title {
+  font-size: clamp(1rem, 1.35vw, 1.15rem);
+  font-weight: 800;
+  color: #d7e2ea;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.more-card-desc {
+  font-size: clamp(0.72rem, 0.92vw, 0.8rem);
+  color: #d7e2ea;
+  opacity: 0.45;
+  line-height: 1.65;
+  margin: 0;
+  margin-top: 0.15rem;
+}
+
+.more-card-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+}
+
+/* Text-style links inside more-cards */
+.more-card-links {
+  display: flex;
+  gap: 1.1rem;
+  align-items: center;
+}
+
+.more-card-link {
+  font-size: clamp(0.65rem, 0.88vw, 0.76rem);
+  font-weight: 600;
+  color: #d7e2ea;
+  opacity: 0.45;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: opacity 0.18s;
+}
+.more-card-link:hover {
+  opacity: 1;
+}
+
+/* ── Certifications section ───────────────────────── */
+
+/* Outer card — three-column: identity | divider | courses */
+.cert-card {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0 clamp(2rem, 4vw, 3.5rem);
+  align-items: stretch;
+  border: 1.5px solid rgba(12, 12, 12, 0.1);
+  border-radius: 24px;
+  padding: clamp(1.75rem, 3vw, 2.5rem) clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+/* Identity column — flex column so button anchors to bottom */
+.cert-identity {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* Vertical rule between columns */
+.cert-divider {
+  background: rgba(12, 12, 12, 0.1);
+  align-self: stretch;
+}
+
+/* Courses column */
+.cert-courses {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+/* Shared label style */
+.cert-label {
+  font-size: clamp(0.58rem, 0.85vw, 0.68rem);
+  font-weight: 700;
+  color: #0c0c0c;
+  opacity: 0.38;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0 0 0.45rem;
+}
+
+/* Cert name */
+.cert-name {
+  font-size: clamp(1rem, 1.9vw, 1.5rem);
+  font-weight: 800;
+  color: #0c0c0c;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+/* Issue date */
+.cert-date {
+  font-size: clamp(0.68rem, 0.95vw, 0.8rem);
+  font-weight: 500;
+  color: #0c0c0c;
+  opacity: 0.4;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+/* Mobile: stack identity → divider (horizontal) → courses */
+@media (max-width: 640px) {
+  .cert-card {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1px auto;
+    gap: clamp(1.25rem, 4vw, 1.75rem) 0;
+  }
+  .cert-divider {
+    height: 1px;
+    background: rgba(12, 12, 12, 0.1);
+    align-self: auto;
+  }
+}
+
+/* ── Certifications — row layout with cert visual ─ */
+.cert-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+/* Desktop: image to the left, cert card takes remaining space */
+@media (min-width: 700px) {
+  .cert-row {
+    grid-template-columns: 220px 1fr;
+    align-items: start;
+  }
+}
+
+/* Cert visual wrapper — portrait ratio suits both PDF and screenshot */
+.cert-visual {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  border: 1px solid rgba(12,12,12,0.1);
+  background: #f8f9fa;
+}
+@media (min-width: 700px) {
+  .cert-visual {
+    width: 200px;
+    aspect-ratio: 3 / 4;
+  }
+}
+
+/* ── GitHub button — teal-accented variant ──────── */
+.btn-github {
+  border-color: rgba(0, 168, 182, 0.55) !important;
+  color: #00a8b6 !important;
+  background: rgba(0, 168, 182, 0.06) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+.btn-github:hover {
+  background: rgba(0, 168, 182, 0.14) !important;
+  border-color: rgba(0, 168, 182, 0.85) !important;
+}
+
+/* More-card GitHub link — inherit teal accent */
+.more-card-link--github {
+  color: #00a8b6 !important;
+}
+.more-card-link--github:hover {
+  color: #5dd5df !important;
 }

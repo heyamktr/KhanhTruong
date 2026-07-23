@@ -90,7 +90,7 @@ export default function StickyNav() {
               {link.label}
             </a>
           ))}
-          <a href="/Khanh_Truong_Resume.pdf" target="_blank" rel="noreferrer">
+          <a href="https://drive.google.com/file/d/1Oxi15YUcd5qIfdSn93luGoZPBqHWbgBA/view?usp=sharing" target="_blank" rel="noreferrer">
             <button
               className="btn-contact"
               style={{ padding: "0.4rem 1.1rem", fontSize: "0.72rem" }}
@@ -185,7 +185,7 @@ export default function StickyNav() {
             </a>
           ))}
           <a
-            href="/Khanh_Truong_Resume.pdf"
+            href="https://drive.google.com/file/d/1Oxi15YUcd5qIfdSn93luGoZPBqHWbgBA/view?usp=sharing"
             target="_blank"
             rel="noreferrer"
             onClick={() => setMenuOpen(false)}

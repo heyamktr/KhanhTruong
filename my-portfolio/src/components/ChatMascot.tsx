@@ -6,6 +6,7 @@ import {
   INITIAL_SUGGESTIONS,
   INTRO_MESSAGE,
   type BotResponse,
+  type ChatAction,
 } from "@/data/chatResponses";
 
 // ── Types ─────────────────────────────────────────────────────────────
@@ -15,6 +16,7 @@ interface Message {
   id: string;
   role: "user" | "bot";
   text: string;
+  actions?: ChatAction[];
 }
 
 const genId = () => `${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -142,7 +144,7 @@ export default function ChatMascot() {
         const res: BotResponse = getResponse(text);
         setMessages((prev) => [
           ...prev,
-          { id: genId(), role: "bot", text: res.answer },
+          { id: genId(), role: "bot", text: res.answer, actions: res.actions },
         ]);
         setSuggestions(res.suggestions);
         setIsTyping(false);
@@ -348,6 +350,8 @@ export default function ChatMascot() {
           <div
             role="log"
             aria-live="polite"
+            data-lenis-prevent=""
+            onWheel={(e) => e.stopPropagation()}
             style={{
               flex: 1,
               overflowY: "auto",
@@ -383,28 +387,44 @@ export default function ChatMascot() {
                     }}
                   />
                 )}
-                <div
-                  style={{
-                    maxWidth: "80%",
-                    padding: "8px 12px",
-                    borderRadius:
-                      msg.role === "user"
-                        ? "16px 16px 4px 16px"
-                        : "16px 16px 16px 4px",
-                    background:
-                      msg.role === "user"
-                        ? "linear-gradient(123deg, #00a8b6, #2176b0)"
-                        : "#f1f5f9",
-                    color: msg.role === "user" ? "#fff" : "#1e293b",
-                    fontSize: 13,
-                    lineHeight: 1.6,
-                    whiteSpace: "pre-line",
-                    wordBreak: "break-word",
-                    fontFamily: "var(--font-kanit), sans-serif",
-                    fontWeight: 300,
-                  }}
-                >
-                  {msg.text}
+                <div style={{ maxWidth: "80%", display: "flex", flexDirection: "column", gap: 5 }}>
+                  <div
+                    style={{
+                      padding: "8px 12px",
+                      borderRadius:
+                        msg.role === "user"
+                          ? "16px 16px 4px 16px"
+                          : "16px 16px 16px 4px",
+                      background:
+                        msg.role === "user"
+                          ? "linear-gradient(123deg, #00a8b6, #2176b0)"
+                          : "#f1f5f9",
+                      color: msg.role === "user" ? "#fff" : "#1e293b",
+                      fontSize: 13,
+                      lineHeight: 1.6,
+                      whiteSpace: "pre-line",
+                      wordBreak: "break-word",
+                      fontFamily: "var(--font-kanit), sans-serif",
+                      fontWeight: 300,
+                    }}
+                  >
+                    {msg.text}
+                  </div>
+                  {msg.role === "bot" && msg.actions && msg.actions.length > 0 && (
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                      {msg.actions.map((action) => (
+                        <a
+                          key={action.href}
+                          href={action.href}
+                          target={action.href.startsWith("http") ? "_blank" : undefined}
+                          rel={action.href.startsWith("http") ? "noreferrer" : undefined}
+                          style={chatActionStyle}
+                        >
+                          {action.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -586,4 +606,19 @@ const suggestionBtnStyle: React.CSSProperties = {
   transition: "background 0.15s",
   whiteSpace: "nowrap",
   letterSpacing: "0.01em",
+};
+
+const chatActionStyle: React.CSSProperties = {
+  display: "inline-block",
+  padding: "3px 10px",
+  borderRadius: 20,
+  fontSize: 11,
+  fontWeight: 600,
+  fontFamily: "var(--font-kanit), sans-serif",
+  color: "#00a8b6",
+  border: "1px solid rgba(0,168,182,0.38)",
+  background: "rgba(0,168,182,0.06)",
+  textDecoration: "none",
+  letterSpacing: "0.02em",
+  whiteSpace: "nowrap",
 };

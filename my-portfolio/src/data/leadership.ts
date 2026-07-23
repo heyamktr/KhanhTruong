@@ -14,7 +14,7 @@ export const leadership = [
   },
   {
     role: "Member",
-    org: "IT Associates Program, DePauw University",
+    org: "Information Technology Associates Program, DePauw University",
     date: "Sep 2024 – Present",
     description:
       "Competitive technology leadership program supporting campus IT operations and digital infrastructure.",

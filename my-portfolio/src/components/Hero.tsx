@@ -229,7 +229,7 @@ export default function Hero() {
               </a>
             ))}
             <a
-              href="/Khanh_Truong_Resume.pdf"
+              href="https://drive.google.com/file/d/1Oxi15YUcd5qIfdSn93luGoZPBqHWbgBA/view?usp=sharing"
               target="_blank"
               rel="noreferrer"
               className="anim-btn"

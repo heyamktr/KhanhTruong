@@ -55,10 +55,10 @@ export default function Contact() {
   const inputStyle: React.CSSProperties = {
     width: "100%",
     borderRadius: 16,
-    border: "1px solid rgba(12,12,12,0.15)",
-    background: "rgba(12,12,12,0.03)",
+    border: "1px solid rgba(215,226,234,0.15)",
+    background: "rgba(215,226,234,0.05)",
     padding: "0.875rem 1rem",
-    color: "#0C0C0C",
+    color: "#D7E2EA",
     fontFamily: "var(--font-kanit), sans-serif",
     fontSize: "clamp(0.85rem, 1.3vw, 1rem)",
     fontWeight: 400,
@@ -72,7 +72,7 @@ export default function Contact() {
     fontWeight: 500,
     textTransform: "uppercase",
     letterSpacing: "0.15em",
-    color: "#0C0C0C",
+    color: "#D7E2EA",
     opacity: 0.45,
     marginBottom: "0.5rem",
   };
@@ -80,9 +80,8 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="section-white"
+      className="section-dark-overlay"
       style={{
-        marginTop: "-2.5rem",
         position: "relative",
         zIndex: 50,
         padding: "clamp(5rem, 8vw, 8rem) clamp(1.25rem, 3vw, 2.5rem) clamp(4rem, 6vw, 6rem)",
@@ -95,7 +94,7 @@ export default function Contact() {
             textTransform: "uppercase",
             textAlign: "center",
             fontSize: "clamp(2rem, 5vw, 72px)",
-            color: "#0C0C0C",
+            color: "#D7E2EA",
             letterSpacing: "-0.025em",
             lineHeight: 1,
             marginBottom: "clamp(3rem, 5vw, 4rem)",
@@ -111,7 +110,7 @@ export default function Contact() {
             style={{
               fontSize: "clamp(1rem, 2vw, 1.35rem)",
               fontWeight: 400,
-              color: "#0C0C0C",
+              color: "#D7E2EA",
               opacity: 0.6,
               lineHeight: 1.625,
               marginBottom: "1.75rem",
@@ -125,10 +124,10 @@ export default function Contact() {
               <button className="btn-contact">Email Me</button>
             </a>
             <a href="https://github.com/heyamktr" target="_blank" rel="noreferrer">
-              <button className="btn-outline-dark">GitHub</button>
+              <button className="btn-outline">GitHub</button>
             </a>
             <a href="https://linkedin.com/in/heyamktr" target="_blank" rel="noreferrer">
-              <button className="btn-outline-dark">LinkedIn</button>
+              <button className="btn-outline">LinkedIn</button>
             </a>
           </div>
         </FadeIn>
@@ -151,8 +150,8 @@ export default function Contact() {
                   placeholder="Your name"
                   required
                   style={inputStyle}
-                  onFocus={(e) => (e.target.style.borderColor = "rgba(12,12,12,0.4)")}
-                  onBlur={(e) => (e.target.style.borderColor = "rgba(12,12,12,0.15)")}
+                  onFocus={(e) => (e.target.style.borderColor = "rgba(0,168,182,0.6)")}
+                  onBlur={(e) => (e.target.style.borderColor = "rgba(215,226,234,0.15)")}
                 />
               </div>
               <div>
@@ -164,8 +163,8 @@ export default function Contact() {
                   placeholder="you@example.com"
                   required
                   style={inputStyle}
-                  onFocus={(e) => (e.target.style.borderColor = "rgba(12,12,12,0.4)")}
-                  onBlur={(e) => (e.target.style.borderColor = "rgba(12,12,12,0.15)")}
+                  onFocus={(e) => (e.target.style.borderColor = "rgba(0,168,182,0.6)")}
+                  onBlur={(e) => (e.target.style.borderColor = "rgba(215,226,234,0.15)")}
                 />
               </div>
             </div>
@@ -179,8 +178,8 @@ export default function Contact() {
                 placeholder="Tell me about the role, project, or what you want to build."
                 required
                 style={{ ...inputStyle, resize: "vertical" }}
-                onFocus={(e) => (e.target.style.borderColor = "rgba(12,12,12,0.4)")}
-                onBlur={(e) => (e.target.style.borderColor = "rgba(12,12,12,0.15)")}
+                onFocus={(e) => (e.target.style.borderColor = "rgba(0,168,182,0.6)")}
+                onBlur={(e) => (e.target.style.borderColor = "rgba(215,226,234,0.15)")}
               />
             </div>
 
@@ -188,7 +187,7 @@ export default function Contact() {
               <p
                 style={{
                   fontSize: "0.9rem",
-                  color: status.type === "success" ? "#059669" : "#dc2626",
+                  color: status.type === "success" ? "#34d399" : "#f87171",
                 }}
               >
                 {status.message}
@@ -208,7 +207,7 @@ export default function Contact() {
                 {isSubmitting ? "Sending..." : "Send Message"}
               </button>
               <a href="#home">
-                <button type="button" className="btn-outline-dark">Back to Top</button>
+                <button type="button" className="btn-outline">Back to Top</button>
               </a>
             </div>
           </form>
